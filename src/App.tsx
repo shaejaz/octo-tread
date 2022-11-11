@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function App (): React.ReactElement {
+function App (): JSX.Element {
   const [count, setCount] = useState(0)
 
   return (
