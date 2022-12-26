@@ -1,11 +1,17 @@
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
-import App from '../App'
+import { Main } from '../layouts/Main'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />
+    element: <Main />,
+    children: [
+      {
+        path: '/',
+        element: <div>Hello world</div>
+      }
+    ]
   }
 ])
 
