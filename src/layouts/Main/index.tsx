@@ -7,7 +7,7 @@ export function Main() {
     <>
       <Toolbar />
 
-      <Box component={'main'} width={'full'} maxWidth={'6xl'} m={'auto'} px={6} py={8}>
+      <Box component='main' maxWidth='lg' m='auto' px={3} py={6}>
         <Outlet />
       </Box>
     </>

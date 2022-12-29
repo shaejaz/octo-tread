@@ -1,11 +1,15 @@
-import { Stack, Typography } from '@mui/material'
+import { AppBar, Container, Toolbar as MuiToolbar, Typography } from '@mui/material'
 
 export function Toolbar() {
   return (
-    <Stack direction='row' justifyContent='space-between' alignItems='center'>
-      <Typography variant='h5'>Octotread</Typography>
+    <AppBar position='sticky'>
+      <Container maxWidth='lg'>
+        <MuiToolbar disableGutters sx={{ justifyContent: 'space-between' }}>
+          <Typography variant='h5'>Octotread</Typography>
 
-      <Typography variant='h6'>Navbar</Typography>
-    </Stack>
+          <Typography variant='h6'>Navbar</Typography>
+        </MuiToolbar>
+      </Container>
+    </AppBar>
   )
 }
