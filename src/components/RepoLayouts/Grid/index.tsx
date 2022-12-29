@@ -1,5 +1,5 @@
-import React from 'react'
-import { Text, Flex, SimpleGrid } from '@chakra-ui/react'
+import { Stack } from '@mui/material'
+import Grid from '@mui/material/Grid'
 
 interface Repository {
   id: string
@@ -10,28 +10,20 @@ interface Repository {
   stars: number
 }
 
-export function Grid (props: { repos: Repository[] }): JSX.Element {
+export function GridLayout(props: { repos: Repository[] }) {
   return (
-    <SimpleGrid columns={{ base: 1, sm: 2, md: 3 }} spacing={4}>
-      {props.repos.map((i, idx) =>
-        <Flex key={idx} direction={'column'} h={40} border={'1px solid black'}>
-          <Text>
-            {i.name}
-          </Text>
-          <Text>
-            {i.author}
-          </Text>
-          <Text>
-            {i.description}
-          </Text>
-          <Text>
-            {i.language}
-          </Text>
-          <Text>
-            {i.stars}
-          </Text>
-        </Flex>
-      )}
-    </SimpleGrid>
+    <Grid container spacing={2}>
+      {props.repos.map((i, idx) => (
+        <Grid key={idx} item xs={12} sm={6} md={4}>
+          <Stack>
+            <span>{i.name}</span>
+            <span>{i.author}</span>
+            <span>{i.description}</span>
+            <span>{i.language}</span>
+            <span>{i.stars}</span>
+          </Stack>
+        </Grid>
+      ))}
+    </Grid>
   )
 }

@@ -1,14 +1,13 @@
-import React from 'react'
-import { Box } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 import { Toolbar } from './Toolbar'
+import { Box } from '@mui/material'
 
-export function Main (): JSX.Element {
+export function Main() {
   return (
     <>
       <Toolbar />
 
-      <Box as={'main'} width={'full'} maxW={'6xl'} margin={'auto'} px={6} py={8}>
+      <Box component={'main'} width={'full'} maxWidth={'6xl'} m={'auto'} px={6} py={8}>
         <Outlet />
       </Box>
     </>
