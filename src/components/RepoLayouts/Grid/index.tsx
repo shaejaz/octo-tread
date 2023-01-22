@@ -1,15 +1,23 @@
-import { Grid } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 import { RepoCard } from './Card'
-import { Repository } from './Repository'
+import { useSearchQuery } from '../../../services/search'
 
-export function GridLayout(props: { repos: Repository[] }) {
+export function GridLayout() {
+  const { data, isLoading } = useSearchQuery(null)
+
   return (
-    <Grid container spacing={4}>
-      {props.repos.map((i, idx) => (
-        <Grid key={idx} item xs={12} sm={6} md={4}>
-          <RepoCard repo={i} />
+    <>
+      {isLoading && data ? (
+        <Typography>Loading</Typography>
+      ) : (
+        <Grid container spacing={4}>
+          {data?.search.nodes.map((i, idx) => (
+            <Grid key={idx} item xs={12} sm={6} md={4}>
+              <RepoCard repo={i} />
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      )}
+    </>
   )
 }

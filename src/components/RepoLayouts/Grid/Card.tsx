@@ -1,5 +1,5 @@
 import { Card, CardContent, CardProps, Typography } from '@mui/material'
-import { Repository } from './Repository'
+import { Repository } from '../../../services/search'
 
 interface RepoCardProps extends CardProps {
   repo: Repository
@@ -12,10 +12,7 @@ export function RepoCard(props: RepoCardProps) {
     <Card sx={{ height: '15rem' }} {...cardProps}>
       <CardContent>
         <Typography>{repo.name}</Typography>
-        <Typography>{repo.author}</Typography>
         <Typography>{repo.description}</Typography>
-        <Typography>{repo.language}</Typography>
-        <Typography>{repo.stars}</Typography>
       </CardContent>
     </Card>
   )
