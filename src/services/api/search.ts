@@ -1,11 +1,17 @@
-import { createApi } from '@reduxjs/toolkit/query/react'
 import { gql } from 'graphql-request'
-import { graphqlRequestBaseQuery } from '@rtk-query/graphql-request-base-query'
+import { api } from '.'
 
 export interface Repository {
   id: string
   name: string
   description: string
+  stargazerCount: number
+  owner: {
+    login: string
+  }
+  languages: {
+    nodes: { name: string }[]
+  }
 }
 
 export interface GetPostsResponse {
@@ -14,17 +20,7 @@ export interface GetPostsResponse {
   }
 }
 
-export const api = createApi({
-  baseQuery: graphqlRequestBaseQuery({
-    url: 'https://api.github.com/graphql',
-    prepareHeaders: (headers) => {
-      const token = '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'
-      if (token) {
-        headers.set('authorization', `Bearer ${token}`)
-      }
-      return headers
-    },
-  }),
+export const searchApi = api.injectEndpoints({
   endpoints: (builder) => ({
     search: builder.query<GetPostsResponse, null>({
       query: () => ({
@@ -36,6 +32,15 @@ export const api = createApi({
                   id
                   name
                   description
+                  stargazerCount
+                  owner {
+                    login
+                  }
+                  languages(first: 10) {
+                    nodes {
+                      name
+                    }
+                  }
                 }
               }
             }
@@ -46,4 +51,4 @@ export const api = createApi({
   }),
 })
 
-export const { useSearchQuery } = api
+export const { useSearchQuery } = searchApi

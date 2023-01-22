@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material'
 import { RepoCard } from './Card'
-import { useSearchQuery } from '../../../services/search'
+import { useSearchQuery } from '../../../services/api/search'
 
 export function GridLayout() {
   const { data, isLoading } = useSearchQuery(null)

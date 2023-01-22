@@ -5,8 +5,8 @@ import { ThemeProvider, createTheme } from '@mui/material/styles'
 import router from './routes'
 import { red } from '@mui/material/colors'
 import { CssBaseline } from '@mui/material'
-import { ApiProvider } from '@reduxjs/toolkit/query/react'
-import { api } from './services/search'
+import { Provider } from 'react-redux'
+import { store } from './services/store'
 
 const theme = createTheme({
   palette: {
@@ -19,10 +19,10 @@ const theme = createTheme({
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <CssBaseline />
-    <ApiProvider api={api}>
+    <Provider store={store}>
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
-    </ApiProvider>
+    </Provider>
   </React.StrictMode>,
 )
