@@ -22,11 +22,11 @@ export interface GetPostsResponse {
 
 export const searchApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    search: builder.query<GetPostsResponse, null>({
-      query: () => ({
+    search: builder.query<GetPostsResponse, string>({
+      query: (q) => ({
         document: gql`
           {
-            search(query: "rails language:javascript", type: REPOSITORY, first: 5) {
+            search(query: "${q}", type: REPOSITORY, first: 5) {
               nodes {
                 ... on Repository {
                   id
@@ -51,4 +51,4 @@ export const searchApi = api.injectEndpoints({
   }),
 })
 
-export const { useSearchQuery } = searchApi
+export const { useSearchQuery, useLazySearchQuery } = searchApi
