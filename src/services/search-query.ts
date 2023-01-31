@@ -4,7 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 export interface SearchQueryState {
   searchText?: string
   searchTextIn?: string
-  language?: string
+  language: string[]
   stars?: number
   created?: string
   topic?: string
@@ -15,7 +15,7 @@ export interface SearchQueryState {
 const initialState: SearchQueryState = {
   searchText: 'test',
   searchTextIn: undefined,
-  language: 'javascript',
+  language: ['Javascript'],
   stars: undefined,
   created: undefined,
   topic: undefined,
@@ -27,7 +27,9 @@ function generateQueryFn(state: SearchQueryState) {
   const queries = []
   queries.push(state.searchText ?? '')
   queries.push(state.searchTextIn ? `in:${state.searchTextIn}` : '')
-  queries.push(state.language ? `language:${state.language}` : '')
+  queries.push(
+    state.language ? state.language.map((l) => `language:${l.toLowerCase()}`).join(' ') : '',
+  )
   queries.push(state.stars ? `stars:${state.stars}` : '')
   queries.push(state.created ? `created:${state.created}` : '')
   queries.push(state.topic ? `topic:${state.topic}` : '')
@@ -48,7 +50,7 @@ export const searchQuerySlice = createSlice({
       state.searchTextIn = action.payload
       state.query = generateQueryFn(state)
     },
-    setLanguage: (state, action: PayloadAction<string>) => {
+    setLanguage: (state, action: PayloadAction<string[]>) => {
       state.language = action.payload
       state.query = generateQueryFn(state)
     },
@@ -74,6 +76,6 @@ export const searchQuerySlice = createSlice({
   },
 })
 
-export const { generateQuery } = searchQuerySlice.actions
+export const { setSearchText, setLanguage, generateQuery } = searchQuerySlice.actions
 
 export default searchQuerySlice.reducer
