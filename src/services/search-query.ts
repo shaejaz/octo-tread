@@ -5,7 +5,7 @@ export interface SearchQueryState {
   searchText?: string
   searchTextIn?: string
   language: string[]
-  stars?: number
+  stars: number
   created?: string
   topic?: string
   sort?: string
@@ -16,7 +16,7 @@ const initialState: SearchQueryState = {
   searchText: 'test',
   searchTextIn: undefined,
   language: ['Javascript'],
-  stars: undefined,
+  stars: 20,
   created: undefined,
   topic: undefined,
   sort: undefined,
@@ -30,7 +30,7 @@ function generateQueryFn(state: SearchQueryState) {
   queries.push(
     state.language ? state.language.map((l) => `language:${l.toLowerCase()}`).join(' ') : '',
   )
-  queries.push(state.stars ? `stars:${state.stars}` : '')
+  queries.push(state.stars ? `stars:>${state.stars}` : '')
   queries.push(state.created ? `created:${state.created}` : '')
   queries.push(state.topic ? `topic:${state.topic}` : '')
   queries.push(state.sort ? `sort:${state.sort}` : '')
@@ -54,8 +54,8 @@ export const searchQuerySlice = createSlice({
       state.language = action.payload
       state.query = generateQueryFn(state)
     },
-    setStars: (state, action: PayloadAction<number>) => {
-      state.stars = action.payload
+    setStars: (state, action: PayloadAction<number | undefined>) => {
+      state.stars = action.payload ?? 0
       state.query = generateQueryFn(state)
     },
     setCreated: (state, action: PayloadAction<string>) => {
@@ -76,6 +76,6 @@ export const searchQuerySlice = createSlice({
   },
 })
 
-export const { setSearchText, setLanguage, generateQuery } = searchQuerySlice.actions
+export const { setSearchText, setLanguage, setStars, generateQuery } = searchQuerySlice.actions
 
 export default searchQuerySlice.reducer
