@@ -6,7 +6,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  token: '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',
+  token: import.meta.env.VITE_GITHUB_KEY,
 }
 
 export const authSlice = createSlice({
