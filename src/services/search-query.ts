@@ -1,12 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import {
+  format,
+  fromUnixTime,
+  getUnixTime,
+  startOfDay,
+  subDays,
+  subMonths,
+  subWeeks,
+} from 'date-fns'
+
+export type DateRange = 'daily' | 'weekly' | 'monthly'
 
 export interface SearchQueryState {
   searchText?: string
   searchTextIn?: string
   language: string[]
   stars: number
-  created?: string
+  dateRange: DateRange
+  createdLast: {
+    start: number
+    end: number
+  }
   topic?: string
   sort?: string
   query?: string
@@ -17,7 +32,11 @@ const initialState: SearchQueryState = {
   searchTextIn: undefined,
   language: ['Javascript'],
   stars: 20,
-  created: undefined,
+  dateRange: 'weekly',
+  createdLast: {
+    start: getUnixTime(new Date()),
+    end: getUnixTime(subWeeks(new Date(), 1)),
+  },
   topic: undefined,
   sort: undefined,
   query: undefined,
@@ -31,7 +50,16 @@ function generateQueryFn(state: SearchQueryState) {
     state.language ? state.language.map((l) => `language:${l.toLowerCase()}`).join(' ') : '',
   )
   queries.push(state.stars ? `stars:>${state.stars}` : '')
-  queries.push(state.created ? `created:${state.created}` : '')
+
+  queries.push(
+    state.createdLast
+      ? `created:${format(fromUnixTime(state.createdLast.start), 'yyyy-MM-dd')}..${format(
+          fromUnixTime(state.createdLast.end),
+          'yyyy-MM-dd',
+        )}`
+      : '',
+  )
+
   queries.push(state.topic ? `topic:${state.topic}` : '')
   queries.push(state.sort ? `sort:${state.sort}` : '')
 
@@ -58,8 +86,29 @@ export const searchQuerySlice = createSlice({
       state.stars = action.payload ?? 0
       state.query = generateQueryFn(state)
     },
-    setCreated: (state, action: PayloadAction<string>) => {
-      state.created = action.payload
+    setDateRange: (state, action: PayloadAction<DateRange>) => {
+      state.dateRange = action.payload
+      let fn: ((date: Date | number, amount: number) => Date) | null = null
+      switch (state.dateRange) {
+        case 'daily':
+          fn = subDays
+          break
+        case 'weekly':
+          fn = subWeeks
+          break
+        case 'monthly':
+          fn = subMonths
+          break
+      }
+
+      const now = startOfDay(new Date())
+      const start = fn(now, 1)
+
+      state.createdLast = {
+        start: getUnixTime(start),
+        end: getUnixTime(now),
+      }
+
       state.query = generateQueryFn(state)
     },
     setTopic: (state, action: PayloadAction<string>) => {
@@ -76,6 +125,7 @@ export const searchQuerySlice = createSlice({
   },
 })
 
-export const { setSearchText, setLanguage, setStars, generateQuery } = searchQuerySlice.actions
+export const { setSearchText, setLanguage, setStars, setDateRange, generateQuery } =
+  searchQuerySlice.actions
 
 export default searchQuerySlice.reducer
