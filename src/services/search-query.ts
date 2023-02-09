@@ -12,6 +12,11 @@ import {
 
 export type DateRange = 'daily' | 'weekly' | 'monthly'
 
+interface Pagination {
+  currentPageBase64: string
+  currentPage: number
+}
+
 export interface SearchQueryState {
   searchText?: string
   searchTextIn?: string
@@ -24,6 +29,7 @@ export interface SearchQueryState {
   }
   topic?: string
   sort?: string
+  pagination: Pagination
   query?: string
 }
 
@@ -39,7 +45,15 @@ const initialState: SearchQueryState = {
   },
   topic: undefined,
   sort: undefined,
+  pagination: {
+    currentPageBase64: getCursor(1),
+    currentPage: 1,
+  },
   query: undefined,
+}
+
+function getCursor(i: number) {
+  return btoa(`cursor:${i}`)
 }
 
 function generateQueryFn(state: SearchQueryState) {
@@ -119,13 +133,20 @@ export const searchQuerySlice = createSlice({
       state.sort = action.payload
       state.query = generateQueryFn(state)
     },
+    setPagination: (state, action: PayloadAction<Pick<Pagination, 'currentPage'>>) => {
+      const p: Pagination = {
+        currentPage: action.payload.currentPage,
+        currentPageBase64: getCursor(action.payload.currentPage),
+      }
+      state.pagination = p
+    },
     generateQuery: (state) => {
       state.query = generateQueryFn(state)
     },
   },
 })
 
-export const { setSearchText, setLanguage, setStars, setDateRange, generateQuery } =
+export const { setSearchText, setLanguage, setStars, setDateRange, setPagination, generateQuery } =
   searchQuerySlice.actions
 
 export default searchQuerySlice.reducer

@@ -1,14 +1,22 @@
 import { Button, Grid } from '@mui/material'
 import { RepoCard } from './Card'
-import { useLazySearchQuery } from '../../../services/api/search'
+import { searchApi, useLazySearchQuery } from '../../../services/api/search'
 import { useDispatch, useSelector } from 'react-redux'
 import { generateQuery } from '../../../services/search-query'
 import { RootState } from '../../../services/store'
 import { useEffect } from 'react'
 
 export function GridLayout() {
-  const [trigger, result] = useLazySearchQuery({})
+  const [trigger] = useLazySearchQuery()
+
   const query = useSelector((state: RootState) => state.searchquery.query)
+  const pagination = useSelector((state: RootState) => state.searchquery.pagination)
+
+  const result = searchApi.endpoints.search.useQueryState({
+    q: query ?? '',
+    startCursor: pagination.currentPageBase64,
+  })
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -19,7 +27,7 @@ export function GridLayout() {
     <>
       <Button
         onClick={() => {
-          trigger(query ?? '')
+          trigger({ q: query ?? '', startCursor: pagination.currentPageBase64 })
         }}
       >
         Fetch

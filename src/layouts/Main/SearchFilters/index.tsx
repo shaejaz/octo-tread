@@ -15,7 +15,7 @@ export function SearchFilters() {
   const searchDateRange = useSelector((state: RootState) => state.searchquery.dateRange)
 
   return (
-    <Stack direction='row' alignItems='center' gap={2}>
+    <Stack direction='row' alignItems='center' spacing={2}>
       <TextField
         label='Search text'
         value={searchText}

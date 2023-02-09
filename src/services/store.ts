@@ -1,3 +1,4 @@
+import { listenerMiddleware } from './listener'
 import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { api } from './api'
@@ -11,7 +12,8 @@ export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | 
       auth: authReducer,
       searchquery: searchQueryReducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware),
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().prepend(listenerMiddleware.middleware).concat(api.middleware),
     ...options,
   })
 
