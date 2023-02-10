@@ -40,8 +40,8 @@ const initialState: SearchQueryState = {
   stars: 20,
   dateRange: 'weekly',
   createdLast: {
-    start: getUnixTime(new Date()),
-    end: getUnixTime(subWeeks(new Date(), 1)),
+    start: getUnixTime(subWeeks(new Date(), 1)),
+    end: getUnixTime(new Date()),
   },
   topic: undefined,
   sort: undefined,
