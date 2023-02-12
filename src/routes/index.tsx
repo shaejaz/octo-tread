@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { Main } from '../layouts/Main'
-import { GridLayout } from '../components/RepoLayouts/Grid'
+import { RepoLayouts } from '../components/RepoLayouts'
 
 const router = createBrowserRouter([
   {
@@ -9,7 +9,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <GridLayout />,
+        element: <RepoLayouts />,
       },
     ],
   },

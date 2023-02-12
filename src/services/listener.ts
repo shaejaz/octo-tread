@@ -17,7 +17,8 @@ startAppListening({
   predicate: (action, currentState, previousState) => {
     return (
       currentState.searchquery.pagination.currentPage !==
-      previousState.searchquery.pagination.currentPage
+        previousState.searchquery.pagination.currentPage ||
+      currentState.searchquery.createdLast !== previousState.searchquery.createdLast
     )
   },
   effect: async (action, listenerApi) => {

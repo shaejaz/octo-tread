@@ -100,6 +100,30 @@ export const searchQuerySlice = createSlice({
       state.stars = action.payload ?? 0
       state.query = generateQueryFn(state)
     },
+    loadNextDateRange: (state) => {
+      const start = fromUnixTime(state.createdLast.start)
+
+      let fn: ((date: Date | number, amount: number) => Date) | null = null
+      switch (state.dateRange) {
+        case 'daily':
+          fn = subDays
+          break
+        case 'weekly':
+          fn = subWeeks
+          break
+        case 'monthly':
+          fn = subMonths
+          break
+      }
+      const end = fn(start, 1)
+
+      state.createdLast = {
+        start: getUnixTime(end),
+        end: getUnixTime(start),
+      }
+
+      state.query = generateQueryFn(state)
+    },
     setDateRange: (state, action: PayloadAction<DateRange>) => {
       state.dateRange = action.payload
       let fn: ((date: Date | number, amount: number) => Date) | null = null
@@ -146,7 +170,14 @@ export const searchQuerySlice = createSlice({
   },
 })
 
-export const { setSearchText, setLanguage, setStars, setDateRange, setPagination, generateQuery } =
-  searchQuerySlice.actions
+export const {
+  setSearchText,
+  setLanguage,
+  setStars,
+  setDateRange,
+  setPagination,
+  loadNextDateRange,
+  generateQuery,
+} = searchQuerySlice.actions
 
 export default searchQuerySlice.reducer
