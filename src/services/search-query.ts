@@ -54,10 +54,6 @@ const initialState: SearchQueryState = {
   repositories: [],
 }
 
-function getCursor(i: number) {
-  return btoa(`cursor:${i}`)
-}
-
 export function generateQueryFn(state: SearchQueryState, dateRange: DateRangeObj) {
   const queries = []
   queries.push(state.searchText ?? '')

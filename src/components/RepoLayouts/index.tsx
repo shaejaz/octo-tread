@@ -1,7 +1,6 @@
 import { Button } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { searchApi } from '../../services/api/search'
 import { appendDateToFetch, loadNextDateRange } from '../../services/search-query'
 import { RootState } from '../../services/store'
 import { RepoGroup } from './RepoGroup'
