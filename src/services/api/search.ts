@@ -1,5 +1,7 @@
+import { SearchQueryState, generateQueryFn } from './../search-query'
 import { gql } from 'graphql-request'
 import { api } from '.'
+import { DateRangeObj } from '../search-query'
 
 export interface Repository {
   id: string
@@ -36,14 +38,14 @@ export const searchApi = api.injectEndpoints({
   endpoints: (builder) => ({
     search: builder.query<
       GetPostsResponse,
-      { q: string; endCursor?: string; startCursor?: string }
+      { obj: SearchQueryState; dateRange: DateRangeObj; startCursor?: string }
     >({
-      query: ({ q, endCursor, startCursor }) => {
+      query: ({ obj, dateRange, startCursor }) => {
+        obj = { ...obj }
+
+        const q = generateQueryFn(obj, dateRange)
         const searchArgs = [`query: "${q}"`, 'type: REPOSITORY', 'first: 5']
 
-        if (endCursor) {
-          searchArgs.push(`before: "${endCursor}"`)
-        }
         if (startCursor) {
           searchArgs.push(`after: "${startCursor}"`)
         }

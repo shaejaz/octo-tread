@@ -1,7 +1,5 @@
-// listenerMiddleware.ts
 import { createListenerMiddleware, addListener } from '@reduxjs/toolkit'
 import type { TypedStartListening, TypedAddListener } from '@reduxjs/toolkit'
-
 import type { RootState, AppDispatch } from './store'
 import { searchApi } from './api/search'
 
@@ -15,19 +13,14 @@ export const addAppListener = addListener as TypedAddListener<RootState, AppDisp
 
 startAppListening({
   predicate: (action, currentState, previousState) => {
-    return (
-      currentState.searchquery.pagination.currentPage !==
-        previousState.searchquery.pagination.currentPage ||
-      currentState.searchquery.createdLast !== previousState.searchquery.createdLast
-    )
+    return currentState.searchquery.datesToFetch !== previousState.searchquery.datesToFetch
   },
   effect: async (action, listenerApi) => {
-    const query = listenerApi.getState().searchquery.query
-    const pagination = listenerApi.getState().searchquery.pagination
+    const state = listenerApi.getState().searchquery
     listenerApi.dispatch(
       searchApi.endpoints.search.initiate({
-        q: query ?? '',
-        startCursor: pagination.currentPageBase64,
+        obj: state,
+        dateRange: state.datesToFetch[state.datesToFetch.length - 1],
       }),
     )
   },
