@@ -33,8 +33,9 @@ export interface SearchQueryState {
   stars: number
   dateRange: DateRange
   topic?: string
-  sort?: string
+  sort: string
   datesToFetch: DateRangeObj[]
+  itemsPerPage: number
   repositories: RepoGroup[]
 }
 
@@ -44,14 +45,48 @@ const initialState: SearchQueryState = {
   stars: 20,
   dateRange: 'weekly',
   topic: undefined,
-  sort: undefined,
-  datesToFetch: [
-    {
-      end: getUnixTime(new Date()),
-      start: getUnixTime(subWeeks(new Date(), 1)),
-    },
-  ],
+  sort: 'stars-desc',
+  itemsPerPage: 5,
+  datesToFetch: [],
   repositories: [],
+}
+
+// TODO: Move functions to utils
+export function generateDateRangeObj(dateRange: DateRange, obj?: DateRangeObj) {
+  const start = obj ? fromUnixTime(obj.start) : new Date()
+
+  let fn: ((date: Date | number, amount: number) => Date) | null = null
+  switch (dateRange) {
+    case 'daily':
+      fn = subDays
+      break
+    case 'weekly':
+      fn = subWeeks
+      break
+    case 'monthly':
+      fn = subMonths
+      break
+  }
+  const end = fn(start, 1)
+
+  return {
+    start: getUnixTime(end),
+    end: getUnixTime(start),
+  }
+}
+
+export function normalizedDateRangeToStartOfDay(obj: DateRangeObj): DateRangeObj {
+  const start = fromUnixTime(obj.start)
+  const end = fromUnixTime(obj.end)
+
+  return {
+    start: getUnixTime(startOfDay(start)),
+    end: getUnixTime(startOfDay(end)),
+  }
+}
+
+export function getOldestDateRange(d: DateRangeObj[]) {
+  return d.length ? d[d.length - 1] : null
 }
 
 export function generateQueryFn(state: SearchQueryState, dateRange: DateRangeObj) {
@@ -89,50 +124,29 @@ export const searchQuerySlice = createSlice({
       state.stars = action.payload ?? 0
     },
     appendDateToFetch: (state, action: PayloadAction<DateRangeObj>) => {
-      state.datesToFetch = [...state.datesToFetch, action.payload]
+      const d = getOldestDateRange(state.datesToFetch)
+      const nd = d ? normalizedDateRangeToStartOfDay(d) : null
+
+      if (
+        !nd ||
+        state.datesToFetch.findIndex((i) => i.start === nd.start && i.end === nd.end) === -1
+      ) {
+        state.datesToFetch.push(normalizedDateRangeToStartOfDay(action.payload))
+      }
     },
     loadNextDateRange: (state) => {
-      const d = state.datesToFetch[state.datesToFetch.length - 1]
+      const d = getOldestDateRange(state.datesToFetch)
+      if (!d) return
 
-      const start = fromUnixTime(d.start)
-      let fn: ((date: Date | number, amount: number) => Date) | null = null
-      switch (state.dateRange) {
-        case 'daily':
-          fn = subDays
-          break
-        case 'weekly':
-          fn = subWeeks
-          break
-        case 'monthly':
-          fn = subMonths
-          break
-      }
-      const end = fn(start, 1)
-      state.datesToFetch = [
-        ...state.datesToFetch,
-        { start: getUnixTime(end), end: getUnixTime(start) },
-      ]
+      const obj = generateDateRangeObj(state.dateRange, d)
+
+      state.datesToFetch.push(normalizedDateRangeToStartOfDay(obj))
     },
     setDateRange: (state, action: PayloadAction<DateRange>) => {
-      // state.dateRange = action.payload
-      // let fn: ((date: Date | number, amount: number) => Date) | null = null
-      // switch (state.dateRange) {
-      //   case 'daily':
-      //     fn = subDays
-      //     break
-      //   case 'weekly':
-      //     fn = subWeeks
-      //     break
-      //   case 'monthly':
-      //     fn = subMonths
-      //     break
-      // }
-      // const now = startOfDay(new Date())
-      // const start = fn(now, 1)
-      // state.createdLast = {
-      //   start: getUnixTime(start),
-      //   end: getUnixTime(now),
-      // }
+      state.repositories = []
+      state.dateRange = action.payload
+
+      state.datesToFetch = [normalizedDateRangeToStartOfDay(generateDateRangeObj(action.payload))]
     },
     setTopic: (state, action: PayloadAction<string>) => {
       state.topic = action.payload
@@ -143,7 +157,8 @@ export const searchQuerySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(searchApi.endpoints.search.matchFulfilled, (state, action) => {
-      const d = state.datesToFetch[state.datesToFetch.length - 1]
+      const d = getOldestDateRange(state.datesToFetch)
+      if (!d) return
 
       if (
         state.repositories.findIndex(

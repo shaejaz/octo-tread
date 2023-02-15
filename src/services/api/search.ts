@@ -44,7 +44,7 @@ export const searchApi = api.injectEndpoints({
         obj = { ...obj }
 
         const q = generateQueryFn(obj, dateRange)
-        const searchArgs = [`query: "${q}"`, 'type: REPOSITORY', 'first: 5']
+        const searchArgs = [`query: "${q}"`, 'type: REPOSITORY', `first: ${obj.itemsPerPage}`]
 
         if (startCursor) {
           searchArgs.push(`after: "${startCursor}"`)

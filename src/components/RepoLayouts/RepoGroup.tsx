@@ -32,8 +32,12 @@ export function RepoGroup(props: Props) {
 
   useEffect(() => {
     if (page === 1) return
-    trigger({ obj: state, dateRange: props.repoGroup.dateRange, startCursor: getCursor(page) })
-  }, [page])
+    trigger({
+      obj: state,
+      dateRange: props.repoGroup.dateRange,
+      startCursor: getCursor((page - 1) * state.itemsPerPage),
+    })
+  }, [page, state.itemsPerPage])
 
   return (
     <>
