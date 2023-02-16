@@ -8,7 +8,7 @@ interface Props {
 
 export function TimeFilter(props: Props) {
   return (
-    <FormControl sx={{ width: 300 }}>
+    <FormControl>
       <InputLabel id='date-range-select-label'>Date range</InputLabel>
       <Select
         id='date-range-select'

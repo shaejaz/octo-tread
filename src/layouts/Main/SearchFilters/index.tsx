@@ -1,10 +1,17 @@
 import { Stack, TextField } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { setDateRange, setLanguage, setSearchText, setStars } from '../../../services/search-query'
+import {
+  setDateRange,
+  setLanguage,
+  setSearchText,
+  setStars,
+  setTopics,
+} from '../../../services/search-query'
 import { RootState } from '../../../services/store'
 import { LanguageSelection } from './LanguageSelection'
 import { StarsFilters } from './StarsFilter'
 import { TimeFilter } from './TimeFilter'
+import { TopicFilter } from './TopicFilter'
 
 export function SearchFilters() {
   const dispatch = useDispatch()
@@ -31,6 +38,11 @@ export function SearchFilters() {
       />
 
       <StarsFilters stars={searchStars} handleChange={(n) => dispatch(setStars(n))} />
+
+      <TopicFilter
+        value={[]}
+        handleValueChange={(v) => dispatch(setTopics(v.map((i) => i.name)))}
+      />
 
       <TimeFilter
         value={searchDateRange ?? 'weekly'}

@@ -26,7 +26,7 @@ export function LanguageSelection(props: Props) {
   }, [selected])
 
   return (
-    <FormControl sx={{ width: 300 }}>
+    <FormControl>
       <InputLabel id='languages'>Languages</InputLabel>
       <Select
         labelId='languages'

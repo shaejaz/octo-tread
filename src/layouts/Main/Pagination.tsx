@@ -6,6 +6,7 @@ interface Props {
   handlePageChange: (i: number) => void
 }
 
+// TODO: Move to components and make more generic
 export function Pagination(props: Props) {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     props.handlePageChange(value)

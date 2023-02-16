@@ -32,7 +32,7 @@ export interface SearchQueryState {
   language: string[]
   stars: number
   dateRange: DateRange
-  topic?: string
+  topics: string[]
   sort: string
   datesToFetch: DateRangeObj[]
   itemsPerPage: number
@@ -44,7 +44,7 @@ const initialState: SearchQueryState = {
   language: ['Javascript'],
   stars: 20,
   dateRange: 'weekly',
-  topic: undefined,
+  topics: [],
   sort: 'stars-desc',
   itemsPerPage: 5,
   datesToFetch: [],
@@ -69,6 +69,7 @@ export function generateDateRangeObj(dateRange: DateRange, obj?: DateRangeObj) {
   }
   const end = fn(start, 1)
 
+  // TODO: Fix naming for start and end
   return {
     start: getUnixTime(end),
     end: getUnixTime(start),
@@ -104,7 +105,7 @@ export function generateQueryFn(state: SearchQueryState, dateRange: DateRangeObj
     )}`,
   )
 
-  queries.push(state.topic ? `topic:${state.topic}` : '')
+  state.topics.forEach((i) => queries.push(`topic:${i}`))
   queries.push(state.sort ? `sort:${state.sort}` : '')
 
   return queries.filter((i) => i !== '').join(' ')
@@ -148,8 +149,8 @@ export const searchQuerySlice = createSlice({
 
       state.datesToFetch = [normalizedDateRangeToStartOfDay(generateDateRangeObj(action.payload))]
     },
-    setTopic: (state, action: PayloadAction<string>) => {
-      state.topic = action.payload
+    setTopics: (state, action: PayloadAction<string[]>) => {
+      state.topics = action.payload
     },
     setSort: (state, action: PayloadAction<string>) => {
       state.sort = action.payload
@@ -183,6 +184,7 @@ export const {
   setLanguage,
   setStars,
   setDateRange,
+  setTopics,
   loadNextDateRange,
   appendDateToFetch,
 } = searchQuerySlice.actions

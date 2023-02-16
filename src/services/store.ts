@@ -1,19 +1,19 @@
 import { listenerMiddleware } from './listener'
 import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { api } from './api'
+import { graphQlApi } from './api'
 import authReducer from './auth'
 import searchQueryReducer from './search-query'
 
 export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | undefined) =>
   configureStore({
     reducer: {
-      [api.reducerPath]: api.reducer,
+      [graphQlApi.reducerPath]: graphQlApi.reducer,
       auth: authReducer,
       searchquery: searchQueryReducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().prepend(listenerMiddleware.middleware).concat(api.middleware),
+      getDefaultMiddleware().prepend(listenerMiddleware.middleware).concat(graphQlApi.middleware),
     ...options,
   })
 

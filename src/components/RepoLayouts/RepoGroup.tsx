@@ -5,6 +5,8 @@ import { GridLayout } from './Grid'
 import { RepoGroup as RepoGroupModel } from '../../services/search-query'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../services/store'
+import { Typography } from '@mui/material'
+import { format, fromUnixTime } from 'date-fns'
 
 interface Props {
   repoGroup: RepoGroupModel
@@ -14,9 +16,17 @@ function getCursor(i: number) {
   return btoa(`cursor:${i}`)
 }
 
+// TODO: Rename and fix structure of components
 export function RepoGroup(props: Props) {
   const [page, setPage] = useState(1)
   const [trigger, result] = useLazySearchQuery()
+
+  const header = useMemo(() => {
+    const start = format(fromUnixTime(props.repoGroup.dateRange.end), 'do MMM, yyyy')
+    const end = format(fromUnixTime(props.repoGroup.dateRange.start), 'do MMM, yyyy')
+
+    return `${end} - ${start}`
+  }, [props.repoGroup.dateRange])
 
   const numPages = useMemo(() => {
     if (!props.repoGroup.repos) return 0
@@ -41,6 +51,8 @@ export function RepoGroup(props: Props) {
 
   return (
     <>
+      <Typography variant='h4'>{header}</Typography>
+
       <GridLayout
         repos={
           page !== 1 && result.data?.search.nodes ? result.data.search.nodes : props.repoGroup.repos

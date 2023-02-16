@@ -1,6 +1,6 @@
 import { SearchQueryState, generateQueryFn } from './../search-query'
 import { gql } from 'graphql-request'
-import { api } from '.'
+import { graphQlApi } from '.'
 import { DateRangeObj } from '../search-query'
 
 export interface Repository {
@@ -34,7 +34,7 @@ export interface GetPostsResponse {
   search: SearchRepositoryResult
 }
 
-export const searchApi = api.injectEndpoints({
+export const searchApi = graphQlApi.injectEndpoints({
   endpoints: (builder) => ({
     search: builder.query<
       GetPostsResponse,
