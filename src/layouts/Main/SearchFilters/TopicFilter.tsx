@@ -7,7 +7,7 @@ const defaultTopicQuery: TopicSearchQuery = {
 }
 
 interface Props {
-  value: Topic[]
+  value: string[]
   handleValueChange: (v: Topic[]) => void
 }
 
@@ -30,6 +30,13 @@ export function TopicFilter(props: Props) {
     [trigger],
   )
 
+  const _value = useMemo(() => {
+    if (result.data) {
+      return result.data.items.filter((i) => props.value.some((n) => n === i.name))
+    }
+    return []
+  }, [props.value])
+
   useEffect(() => {
     if (open && searchValue === '') {
       trigger({ q: defaultTopicQuery })
@@ -46,7 +53,7 @@ export function TopicFilter(props: Props) {
       disablePortal
       multiple
       id='topics-search-list'
-      value={props.value}
+      value={_value}
       open={open}
       onOpen={() => {
         setOpen(true)
@@ -76,6 +83,7 @@ export function TopicFilter(props: Props) {
         />
       )}
       // TODO: Add additional filtering for featured/curated etc.
+      // TODO: Add topic logos
     />
   )
 }

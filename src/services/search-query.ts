@@ -39,6 +39,11 @@ export interface SearchQueryState {
   repositories: RepoGroup[]
 }
 
+export interface ResetQueryPayload {
+  state: Pick<SearchQueryState, 'dateRange' | 'language' | 'searchText' | 'stars' | 'topics'>
+  newDateObj: DateRangeObj
+}
+
 const initialState: SearchQueryState = {
   searchText: '',
   language: ['Javascript'],
@@ -92,12 +97,12 @@ export function getOldestDateRange(d: DateRangeObj[]) {
 
 export function generateQueryFn(state: SearchQueryState, dateRange: DateRangeObj) {
   const queries = []
-  queries.push(state.searchText ?? '')
-  queries.push(
-    state.language ? state.language.map((l) => `language:${l.toLowerCase()}`).join(' ') : '',
-  )
-  queries.push(state.stars ? `stars:>${state.stars}` : '')
 
+  queries.push(state.searchText ?? '')
+
+  state.language.forEach((i) => queries.push(`language:${i.toLowerCase()}`))
+
+  queries.push(state.stars ? `stars:>${state.stars}` : '')
   queries.push(
     `created:${format(fromUnixTime(dateRange.start), 'yyyy-MM-dd')}..${format(
       fromUnixTime(dateRange.end),
@@ -155,6 +160,14 @@ export const searchQuerySlice = createSlice({
     setSort: (state, action: PayloadAction<string>) => {
       state.sort = action.payload
     },
+    // TODO: Possible split this into another slice
+    resetQuery: (state, action: PayloadAction<ResetQueryPayload>) => {
+      const s = { ...state, ...action.payload.state }
+
+      s.datesToFetch = [action.payload.newDateObj]
+      s.repositories = []
+      return s
+    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(searchApi.endpoints.search.matchFulfilled, (state, action) => {
@@ -187,6 +200,7 @@ export const {
   setTopics,
   loadNextDateRange,
   appendDateToFetch,
+  resetQuery,
 } = searchQuerySlice.actions
 
 export default searchQuerySlice.reducer

@@ -20,7 +20,7 @@ export function LanguageSelection(props: Props) {
   const [selected, setSelected] = useState<string[]>(props.selected)
 
   useEffect(() => {
-    if (selected && selected.length) {
+    if (selected) {
       props.handleLanguageClick(selected)
     }
   }, [selected])
@@ -37,7 +37,8 @@ export function LanguageSelection(props: Props) {
             target: { value },
           } = event
 
-          setSelected(typeof value === 'string' ? value.split(',') : value)
+          const v = typeof value === 'string' ? value.split(',') : value === undefined ? [] : value
+          setSelected(v)
         }}
         input={<OutlinedInput label='Languages' />}
         renderValue={(s) => s.join(', ')}
