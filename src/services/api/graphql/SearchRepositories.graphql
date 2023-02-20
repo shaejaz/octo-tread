@@ -1,0 +1,29 @@
+query SearchRepositories($q: String!, $reposfirst: Int!, $type: SearchType = REPOSITORY, $langFirst: Int = 4, $topicsFirst: Int = 10) {
+  search(type: $type, first: $reposfirst, query: $q) {
+    nodes {
+      ... on Repository {
+        id
+        name
+        description
+        stargazerCount
+        owner {
+          login
+        }
+        languages(first: $langFirst) {
+          nodes {
+            name
+          }
+        }
+        repositoryTopics(first: $topicsFirst) {
+          nodes {
+            topic {
+              name
+              id
+            }
+          }
+        }
+      }
+    }
+    repositoryCount
+  }
+}

@@ -1,5 +1,5 @@
 import { Autocomplete, TextField, debounce } from '@mui/material'
-import { Topic, TopicSearchQuery, useLazySearchQuery } from '../../../services/api/topics'
+import { Topic, TopicSearchQuery, useLazySearchQuery } from '../../../services/api'
 import { useState, useEffect, useMemo } from 'react'
 
 const defaultTopicQuery: TopicSearchQuery = {

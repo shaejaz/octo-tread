@@ -1,4 +1,4 @@
-import { restApi } from '.'
+import { restApi } from '..'
 
 export interface TopicSearchQuery {
   text?: string
@@ -29,7 +29,7 @@ export interface SearchTopicResponse {
 
 export const topicsApi = restApi.injectEndpoints({
   endpoints: (builder) => ({
-    search: builder.query<SearchTopicResponse, { q: TopicSearchQuery }>({
+    SearchTopic: builder.query<SearchTopicResponse, { q: TopicSearchQuery }>({
       query: ({ q }) => {
         const queryArr = []
 

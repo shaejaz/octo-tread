@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Pagination } from '../../layouts/Main/Pagination'
-import { useLazySearchQuery } from '../../services/api/search'
 import { GridLayout } from './Grid'
 import { RepoGroup as RepoGroupModel } from '../../services/search-query'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../services/store'
 import { Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
+import { useLazySearchRepositoriesQuery } from '../../services/api/graphql/SearchRepositories.generated'
 
 interface Props {
   repoGroup: RepoGroupModel
@@ -19,7 +19,7 @@ function getCursor(i: number) {
 // TODO: Rename and fix structure of components
 export function RepoGroup(props: Props) {
   const [page, setPage] = useState(1)
-  const [trigger, result] = useLazySearchQuery()
+  const [trigger, result] = useLazySearchRepositoriesQuery()
 
   const header = useMemo(() => {
     const start = format(fromUnixTime(props.repoGroup.dateRange.end), 'do MMM, yyyy')
