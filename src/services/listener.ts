@@ -1,8 +1,8 @@
 import { createListenerMiddleware, addListener } from '@reduxjs/toolkit'
 import type { TypedStartListening, TypedAddListener } from '@reduxjs/toolkit'
 import type { RootState, AppDispatch } from './store'
-import { api } from './api/graphql/SearchRepositories.generated'
 import { generateQueryFn } from './search-query'
+import { graphQlApiTest } from './api'
 
 export const listenerMiddleware = createListenerMiddleware()
 
@@ -21,7 +21,7 @@ startAppListening({
     const q = generateQueryFn(state, state.datesToFetch[state.datesToFetch.length - 1])
 
     listenerApi.dispatch(
-      api.endpoints.SearchRepositories.initiate({
+      graphQlApiTest.endpoints.SearchRepositories.initiate({
         q: q,
         reposfirst: state.itemsPerPage,
       }),

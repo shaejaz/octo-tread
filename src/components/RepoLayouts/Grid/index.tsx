@@ -1,10 +1,10 @@
 import { Grid } from '@mui/material'
 import { RepoCard } from './Card'
 // TODO: add base paths in tsconfig
-import { Repository } from '../../../services/api/search'
+import { QueryRepository } from '../../../services/search-query'
 
 interface Props {
-  repos: Repository[]
+  repos: QueryRepository[]
 }
 
 export function GridLayout(props: Props) {

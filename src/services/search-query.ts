@@ -9,7 +9,7 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns'
-import { Repository, searchApi } from './api/search'
+import { graphQlApiTest, SearchRepositoryResult } from './api'
 
 export type DateRange = 'daily' | 'weekly' | 'monthly'
 
@@ -23,7 +23,7 @@ export interface RepoGroup {
     start: number
     end: number
   }
-  repos: Repository[]
+  repos: SearchRepositoryResult['repositories']
   totalRepos: number
 }
 
@@ -170,25 +170,30 @@ export const searchQuerySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(searchApi.endpoints.search.matchFulfilled, (state, action) => {
-      const d = getOldestDateRange(state.datesToFetch)
-      if (!d) return
+    builder.addMatcher(
+      graphQlApiTest.endpoints.SearchRepositories.matchFulfilled,
+      (state, action) => {
+        const d = getOldestDateRange(state.datesToFetch)
+        if (!d) return
 
-      if (
-        state.repositories.findIndex(
-          (r) => r.dateRange.start === d.start && r.dateRange.end === d.end,
-        ) === -1
-      ) {
-        state.repositories = [
-          ...state.repositories,
-          {
-            dateRange: state.datesToFetch[state.datesToFetch.length - 1],
-            repos: action.payload.search.nodes,
-            totalRepos: action.payload.search.repositoryCount,
-          },
-        ]
-      }
-    })
+        if (
+          state.repositories.findIndex(
+            (r) => r.dateRange.start === d.start && r.dateRange.end === d.end,
+          ) === -1
+        ) {
+          const p = action.payload as never as SearchRepositoryResult
+
+          state.repositories = [
+            ...state.repositories,
+            {
+              dateRange: state.datesToFetch[state.datesToFetch.length - 1],
+              repos: p.repositories,
+              totalRepos: p.repositoryCount,
+            },
+          ]
+        }
+      },
+    )
   },
 })
 

@@ -55,4 +55,4 @@ export const topicsApi = restApi.injectEndpoints({
   }),
 })
 
-export const { useSearchQuery, useLazySearchQuery } = topicsApi
+export const { useSearchTopicQuery, useLazySearchTopicQuery } = topicsApi

@@ -1,8 +1,10 @@
 import { Card, CardContent, CardProps, Typography } from '@mui/material'
-import { Repository } from '../../../services/api/search'
+import { SearchRepositoryResult } from '../../../services/api'
+
+type Element<Type> = Type extends Array<infer Item> ? Item : Type
 
 interface RepoCardProps extends CardProps {
-  repo: Repository
+  repo: Element<SearchRepositoryResult['repositories']>
 }
 
 export function RepoCard(props: RepoCardProps) {
@@ -15,7 +17,7 @@ export function RepoCard(props: RepoCardProps) {
         <Typography>{repo.owner.login}</Typography>
         <Typography>{repo.description}</Typography>
         <Typography>Stars: {repo.stargazerCount}</Typography>
-        <Typography>{repo.languages.nodes.reduce((a, c) => a + ' ' + c.name, '')}</Typography>
+        <Typography>{repo.languages?.nodes?.reduce((a, c) => a + ' ' + c.name, '')}</Typography>
       </CardContent>
     </Card>
   )

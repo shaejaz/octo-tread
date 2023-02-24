@@ -1,5 +1,5 @@
-query SearchRepositories($q: String!, $reposfirst: Int!, $type: SearchType = REPOSITORY, $langFirst: Int = 4, $topicsFirst: Int = 10) {
-  search(type: $type, first: $reposfirst, query: $q) {
+query SearchRepositories($q: String!, $reposfirst: Int!, $type: SearchType = REPOSITORY, $langFirst: Int = 4, $topicsFirst: Int = 10, $after: String) {
+  search(type: $type, first: $reposfirst, query: $q, after: $after) {
     nodes {
       ... on Repository {
         id

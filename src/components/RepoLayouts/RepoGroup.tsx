@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Pagination } from '../../layouts/Main/Pagination'
 import { GridLayout } from './Grid'
-import { RepoGroup as RepoGroupModel } from '../../services/search-query'
+import { RepoGroup as RepoGroupModel, generateQueryFn } from '../../services/search-query'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../services/store'
 import { Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
-import { useLazySearchRepositoriesQuery } from '../../services/api/graphql/SearchRepositories.generated'
+import { useLazySearchRepositoriesQuery } from '../../services/api'
 
 interface Props {
   repoGroup: RepoGroupModel
@@ -42,10 +42,12 @@ export function RepoGroup(props: Props) {
 
   useEffect(() => {
     if (page === 1) return
+
+    const q = generateQueryFn(state, props.repoGroup.dateRange)
     trigger({
-      obj: state,
-      dateRange: props.repoGroup.dateRange,
-      startCursor: getCursor((page - 1) * state.itemsPerPage),
+      q: q,
+      reposfirst: state.itemsPerPage,
+      after: getCursor((page - 1) * state.itemsPerPage),
     })
   }, [page, state.itemsPerPage])
 

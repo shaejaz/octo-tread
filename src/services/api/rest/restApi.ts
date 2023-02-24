@@ -1,4 +1,4 @@
-import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query'
+import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react'
 import { RootState } from '../../store'
 
 const baseRestQuery = fetchBaseQuery({

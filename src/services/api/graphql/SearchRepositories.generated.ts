@@ -18,6 +18,7 @@ export type SearchRepositoriesQueryVariables = Types.Exact<{
   type?: Types.InputMaybe<Types.SearchType>;
   langFirst?: Types.InputMaybe<Types.Scalars['Int']>;
   topicsFirst?: Types.InputMaybe<Types.Scalars['Int']>;
+  after?: Types.InputMaybe<Types.Scalars['String']>;
 }>;
 
 
@@ -25,8 +26,8 @@ export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typena
 
 
 export const SearchRepositoriesDocument = `
-    query SearchRepositories($q: String!, $reposfirst: Int!, $type: SearchType = REPOSITORY, $langFirst: Int = 4, $topicsFirst: Int = 10) {
-  search(type: $type, first: $reposfirst, query: $q) {
+    query SearchRepositories($q: String!, $reposfirst: Int!, $type: SearchType = REPOSITORY, $langFirst: Int = 4, $topicsFirst: Int = 10, $after: String) {
+  search(type: $type, first: $reposfirst, query: $q, after: $after) {
     nodes {
       ... on Repository {
         id
