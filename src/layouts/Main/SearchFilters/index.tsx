@@ -1,7 +1,11 @@
 import { Button, Stack, TextField } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { SearchQueryState, generateDateRangeObj, resetQuery } from '../../../services/search-query'
-import { RootState } from '../../../services/store'
+import {
+  SearchQueryState,
+  generateDateRangeObj,
+  resetQuery,
+} from '@octotread/services/search-query'
+import { RootState } from '@octotread/services/store'
 import { LanguageSelection } from './LanguageSelection'
 import { StarsFilters } from './StarsFilter'
 import { TimeFilter } from './TimeFilter'

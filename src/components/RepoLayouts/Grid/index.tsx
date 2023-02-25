@@ -1,7 +1,6 @@
 import { Grid } from '@mui/material'
 import { RepoCard } from './Card'
-// TODO: add base paths in tsconfig
-import { Repository } from '../../../services/api'
+import { Repository } from '@octotread/services/api'
 
 interface Props {
   repos: Repository[]

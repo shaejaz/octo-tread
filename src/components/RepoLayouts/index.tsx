@@ -1,8 +1,8 @@
 import { Button } from '@mui/material'
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { appendDateToFetch, loadNextDateRange } from '../../services/search-query'
-import { RootState } from '../../services/store'
+import { appendDateToFetch, loadNextDateRange } from '@octotread/services/search-query'
+import { RootState } from '@octotread/services/store'
 import { RepoGroup } from './RepoGroup'
 import { getUnixTime, subWeeks } from 'date-fns'
 

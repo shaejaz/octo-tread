@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { Main } from '../layouts/Main'
-import { RepoLayouts } from '../components/RepoLayouts'
+import { Main } from '@octotread/layouts/Main'
+import { RepoLayouts } from '@octotread/components/RepoLayouts'
 
 const router = createBrowserRouter([
   {

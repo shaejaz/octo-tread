@@ -1,5 +1,5 @@
 import { Card, CardContent, CardProps, Typography } from '@mui/material'
-import { Repository } from '../../../services/api'
+import { Repository } from '@octotread/services/api'
 
 interface RepoCardProps extends CardProps {
   repo: Repository
