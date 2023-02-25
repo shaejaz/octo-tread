@@ -14,7 +14,8 @@ const baseGraphQLQuery = graphqlRequestBaseQuery({
   },
 })
 
-export const api = createApi({
+export const baseGraphQLApi = createApi({
   baseQuery: baseGraphQLQuery,
+  reducerPath: 'graphqlApi',
   endpoints: () => ({}),
 })

@@ -2,7 +2,7 @@ overwrite: true
 schema: 'https://docs.github.com/public/schema.docs.graphql'
 documents: 'src/**/*.graphql'
 generates:
-  src/services/api/graphql/types.generated.ts:
+  src/services/api/graphql/generated/types.ts:
     plugins:
       - typescript
       - add:
@@ -15,7 +15,9 @@ generates:
   src/:
     preset: near-operation-file
     presetConfig:
-      baseTypesPath: services/api/graphql/types.generated.ts
+      baseTypesPath: services/api/graphql/generated/types.ts
+      folder: 'generated'
+      extension: '.ts'
     plugins:
       - add:
           content: >
@@ -32,7 +34,6 @@ generates:
              */
       - typescript-operations
       - typescript-rtk-query:
-          importBaseApiFrom: './graphqlApi'
+          importBaseApiFrom: '../base'
+          importBaseApiAlternateName: 'baseGraphQLApi'
           exportHooks: true
-    config:
-      maybeValue: T # normally, this would be T | null, but our msw mock returns everything as nullable, so we want to force these as non-nullalbe

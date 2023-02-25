@@ -9,9 +9,9 @@
  * for this file to be re-created
  */
 
-import * as Types from './types.generated';
+import * as Types from './types';
 
-import { api } from './graphqlApi';
+import { baseGraphQLApi } from '../base';
 export type SearchRepositoriesQueryVariables = Types.Exact<{
   q: Types.Scalars['String'];
   reposfirst: Types.Scalars['Int'];
@@ -22,7 +22,7 @@ export type SearchRepositoriesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository', id: string, name: string, description?: string, stargazerCount: number, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, languages?: { __typename?: 'LanguageConnection', nodes?: Array<{ __typename?: 'Language', name: string }> }, repositoryTopics: { __typename?: 'RepositoryTopicConnection', nodes?: Array<{ __typename?: 'RepositoryTopic', topic: { __typename?: 'Topic', name: string, id: string } }> } } | { __typename?: 'User' }> } };
+export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository', id: string, name: string, description?: string | null, stargazerCount: number, owner: { __typename?: 'Organization', login: string } | { __typename?: 'User', login: string }, languages?: { __typename?: 'LanguageConnection', nodes?: Array<{ __typename?: 'Language', name: string } | null> | null } | null, repositoryTopics: { __typename?: 'RepositoryTopicConnection', nodes?: Array<{ __typename?: 'RepositoryTopic', topic: { __typename?: 'Topic', name: string, id: string } } | null> | null } } | { __typename?: 'User' } | null> | null } };
 
 
 export const SearchRepositoriesDocument = `
@@ -57,7 +57,7 @@ export const SearchRepositoriesDocument = `
 }
     `;
 
-const injectedRtkApi = api.injectEndpoints({
+const injectedRtkApi = baseGraphQLApi.injectEndpoints({
   endpoints: (build) => ({
     SearchRepositories: build.query<SearchRepositoriesQuery, SearchRepositoriesQueryVariables>({
       query: (variables) => ({ document: SearchRepositoriesDocument, variables })

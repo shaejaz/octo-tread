@@ -1,7 +1,6 @@
-import { SearchRepositoriesQuery, api as _graphqlApi } from './graphql/SearchRepositories.generated'
+import { SearchRepositoriesQuery, api as graphqlApi } from './graphql/generated/SearchRepositories'
 
-export { api as graphQlApi } from './graphql/graphqlApi'
-export { api as restApi } from './rest/restApi'
+export { baseRestApi as restApi } from './rest/base'
 export * from './rest/topics'
 
 type Response = Omit<SearchRepositoriesQuery, '__typename'>
@@ -16,9 +15,9 @@ const transform = (res: SearchRepositoriesQuery) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { __typename, ...temp } = i
       const owner = i.owner
-      const languages = i.languages?.nodes?.map((i) => i.name)
-      const topics = i.languages?.nodes?.map((i) => i.name)
-      return { ...temp, owner, language: languages || [], repositoryTopics: topics || topics }
+      const languages = i.languages?.nodes?.map((i) => i?.name)
+      const topics = i.repositoryTopics?.nodes?.map((i) => i?.topic.name)
+      return { ...temp, owner, language: languages || [], repositoryTopics: topics || [] }
     })
 
     return { repositoryCount: res.search.repositoryCount, repositories: repositories }
@@ -28,12 +27,13 @@ const transform = (res: SearchRepositoriesQuery) => {
 }
 
 export type SearchRepositoryResult = NonNullable<ReturnType<typeof transform>>
+export type Repository = SearchRepositoryResult['repositories'][0]
 
-export const graphQlApiTest = _graphqlApi.enhanceEndpoints({
+export const enhancedGraphQlApi = graphqlApi.enhanceEndpoints({
   endpoints: {
     SearchRepositories: {
       // Currently a bug in the enhanceEndpoints and GraphQL Codegen components:
-      // https://github.com/reduxjs/redux-toolkit/issues/1927
+      // https://github.com/reduxjs/redux-toolkit/pull/2953
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       transformResponse: transform,
@@ -41,4 +41,4 @@ export const graphQlApiTest = _graphqlApi.enhanceEndpoints({
   },
 })
 
-export const { useSearchRepositoriesQuery, useLazySearchRepositoriesQuery } = graphQlApiTest
+export const { useSearchRepositoriesQuery, useLazySearchRepositoriesQuery } = enhancedGraphQlApi

@@ -14,7 +14,8 @@ const baseRestQuery = fetchBaseQuery({
   },
 })
 
-export const api = createApi({
+export const baseRestApi = createApi({
   baseQuery: baseRestQuery,
+  reducerPath: 'restApi',
   endpoints: () => ({}),
 })

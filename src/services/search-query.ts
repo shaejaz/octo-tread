@@ -9,7 +9,7 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns'
-import { graphQlApiTest, SearchRepositoryResult } from './api'
+import { enhancedGraphQlApi, Repository, SearchRepositoryResult } from './api'
 
 export type DateRange = 'daily' | 'weekly' | 'monthly'
 
@@ -23,7 +23,7 @@ export interface RepoGroup {
     start: number
     end: number
   }
-  repos: SearchRepositoryResult['repositories']
+  repos: Repository[]
   totalRepos: number
 }
 
@@ -171,7 +171,7 @@ export const searchQuerySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
-      graphQlApiTest.endpoints.SearchRepositories.matchFulfilled,
+      enhancedGraphQlApi.endpoints.SearchRepositories.matchFulfilled,
       (state, action) => {
         const d = getOldestDateRange(state.datesToFetch)
         if (!d) return

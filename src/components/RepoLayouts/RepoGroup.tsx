@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '../../services/store'
 import { Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
-import { useLazySearchRepositoriesQuery } from '../../services/api'
+import { SearchRepositoryResult, useLazySearchRepositoriesQuery } from '../../services/api'
 
 interface Props {
   repoGroup: RepoGroupModel
@@ -57,7 +57,9 @@ export function RepoGroup(props: Props) {
 
       <GridLayout
         repos={
-          page !== 1 && result.data?.search.nodes ? result.data.search.nodes : props.repoGroup.repos
+          page !== 1 && result.data
+            ? (result.data as unknown as SearchRepositoryResult).repositories
+            : props.repoGroup.repos
         }
       />
       <Pagination currentPage={page} numPages={numPages} handlePageChange={handleChange} />
