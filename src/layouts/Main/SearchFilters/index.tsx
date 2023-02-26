@@ -1,21 +1,13 @@
 import { Button, Stack, TextField } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  SearchQueryState,
-  generateDateRangeObj,
-  resetQuery,
-} from '@octotread/services/search-query'
+import { ResetQueryState, generateDateRangeObj, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
 import { LanguageSelection } from './LanguageSelection'
 import { StarsFilters } from './StarsFilter'
 import { TimeFilter } from './TimeFilter'
 import { TopicFilter } from './TopicFilter'
 import { useState } from 'react'
-
-type SearchFilterOption = Pick<
-  SearchQueryState,
-  'dateRange' | 'language' | 'searchText' | 'stars' | 'topics'
->
+import { RepoPerPage } from './RepoPerPage'
 
 export function SearchFilters() {
   const dispatch = useDispatch()
@@ -25,13 +17,15 @@ export function SearchFilters() {
   const searchStars = useSelector((state: RootState) => state.searchquery.stars)
   const searchDateRange = useSelector((state: RootState) => state.searchquery.dateRange)
   const searchTopics = useSelector((state: RootState) => state.searchquery.topics)
+  const repoItemsPerPage = useSelector((state: RootState) => state.searchquery.itemsPerPage)
 
-  const [preApplySettings, setPreApplySettings] = useState<SearchFilterOption>({
+  const [preApplySettings, setPreApplySettings] = useState<ResetQueryState>({
     searchText: searchText,
     language: searchLanguages,
     stars: searchStars,
     dateRange: searchDateRange,
     topics: searchTopics,
+    itemsPerPage: repoItemsPerPage,
   })
 
   const handleApplyClick = () => {
@@ -76,6 +70,11 @@ export function SearchFilters() {
         <TimeFilter
           value={preApplySettings.dateRange}
           handleChange={(v) => setPreApplySettings((s) => ({ ...s, dateRange: v }))}
+        />
+
+        <RepoPerPage
+          num={preApplySettings.itemsPerPage}
+          handleChange={(v) => setPreApplySettings((s) => ({ ...s, itemsPerPage: v }))}
         />
       </Stack>
 

@@ -39,8 +39,13 @@ export interface SearchQueryState {
   repositories: RepoGroup[]
 }
 
+export type ResetQueryState = Pick<
+  SearchQueryState,
+  'dateRange' | 'language' | 'searchText' | 'stars' | 'topics' | 'itemsPerPage'
+>
+
 export interface ResetQueryPayload {
-  state: Pick<SearchQueryState, 'dateRange' | 'language' | 'searchText' | 'stars' | 'topics'>
+  state: ResetQueryState
   newDateObj: DateRangeObj
 }
 
@@ -51,7 +56,7 @@ const initialState: SearchQueryState = {
   dateRange: 'weekly',
   topics: [],
   sort: 'stars-desc',
-  itemsPerPage: 5,
+  itemsPerPage: 9,
   datesToFetch: [],
   repositories: [],
 }
