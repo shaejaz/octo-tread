@@ -105,7 +105,7 @@ function convertToSaveFormat(languages: LanguageFormat): SavedLanguageFormat {
 
   for (const i in languages) {
     const { color } = languages[i]
-    result[i] = { color, slug: i.toLowerCase().replace(' ', '-') }
+    result[i] = { color, slug: i.toLowerCase().replaceAll(' ', '-') }
   }
 
   return result

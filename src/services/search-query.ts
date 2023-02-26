@@ -46,7 +46,7 @@ export interface ResetQueryPayload {
 
 const initialState: SearchQueryState = {
   searchText: '',
-  language: ['Javascript'],
+  language: [],
   stars: 20,
   dateRange: 'weekly',
   topics: [],

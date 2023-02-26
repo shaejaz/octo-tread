@@ -56,10 +56,9 @@ export function SearchFilters() {
         />
 
         <LanguageSelection
-          selected={preApplySettings.language ?? []}
-          // TODO: Get languages from github repo/API
-          languages={['Javascript', 'Ruby', 'C++']}
-          handleLanguageClick={(l) => setPreApplySettings((s) => ({ ...s, language: l }))}
+          // // TODO: Get languages from github repo/API
+          value={preApplySettings.language}
+          handleValueChange={(l) => setPreApplySettings((s) => ({ ...s, language: l }))}
         />
 
         <StarsFilters

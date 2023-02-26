@@ -5,6 +5,11 @@ const baseRestQuery = fetchBaseQuery({
   baseUrl: 'https://api.github.com',
   // TODO: append additional GitHub headers
   prepareHeaders: (headers, { getState }) => {
+    if (headers.has('noHeaders')) {
+      headers.delete('noHeaders')
+      return
+    }
+
     const token = (getState() as RootState).auth.token
     if (token) {
       headers.set('authorization', `Bearer ${token}`)
