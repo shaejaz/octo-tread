@@ -81,7 +81,7 @@ export function generateDateRangeObj(dateRange: DateRange, obj?: DateRangeObj) {
   }
 }
 
-export function normalizedDateRangeToStartOfDay(obj: DateRangeObj): DateRangeObj {
+export function normalizeDateRangeToStartOfDay(obj: DateRangeObj): DateRangeObj {
   const start = fromUnixTime(obj.start)
   const end = fromUnixTime(obj.end)
 
@@ -131,13 +131,13 @@ export const searchQuerySlice = createSlice({
     },
     appendDateToFetch: (state, action: PayloadAction<DateRangeObj>) => {
       const d = getOldestDateRange(state.datesToFetch)
-      const nd = d ? normalizedDateRangeToStartOfDay(d) : null
+      const nd = d ? normalizeDateRangeToStartOfDay(d) : null
 
       if (
         !nd ||
         state.datesToFetch.findIndex((i) => i.start === nd.start && i.end === nd.end) === -1
       ) {
-        state.datesToFetch.push(normalizedDateRangeToStartOfDay(action.payload))
+        state.datesToFetch.push(normalizeDateRangeToStartOfDay(action.payload))
       }
     },
     loadNextDateRange: (state) => {
@@ -146,13 +146,14 @@ export const searchQuerySlice = createSlice({
 
       const obj = generateDateRangeObj(state.dateRange, d)
 
-      state.datesToFetch.push(normalizedDateRangeToStartOfDay(obj))
+      state.datesToFetch.push(normalizeDateRangeToStartOfDay(obj))
     },
     setDateRange: (state, action: PayloadAction<DateRange>) => {
       state.repositories = []
       state.dateRange = action.payload
 
-      state.datesToFetch = [normalizedDateRangeToStartOfDay(generateDateRangeObj(action.payload))]
+      // TODO: Remove use to `new Date()` in this reducer
+      state.datesToFetch = [normalizeDateRangeToStartOfDay(generateDateRangeObj(action.payload))]
     },
     setTopics: (state, action: PayloadAction<string[]>) => {
       state.topics = action.payload
@@ -164,7 +165,7 @@ export const searchQuerySlice = createSlice({
     resetQuery: (state, action: PayloadAction<ResetQueryPayload>) => {
       const s = { ...state, ...action.payload.state }
 
-      s.datesToFetch = [action.payload.newDateObj]
+      s.datesToFetch = [normalizeDateRangeToStartOfDay(action.payload.newDateObj)]
       s.repositories = []
       return s
     },

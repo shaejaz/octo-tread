@@ -21,10 +21,13 @@ startAppListening({
     const q = generateQueryFn(state, state.datesToFetch[state.datesToFetch.length - 1])
 
     listenerApi.dispatch(
-      enhancedGraphQlApi.endpoints.SearchRepositories.initiate({
-        q: q,
-        reposfirst: state.itemsPerPage,
-      }),
+      enhancedGraphQlApi.endpoints.SearchRepositories.initiate(
+        {
+          q: q,
+          reposfirst: state.itemsPerPage,
+        },
+        { forceRefetch: true },
+      ),
     )
   },
 })
