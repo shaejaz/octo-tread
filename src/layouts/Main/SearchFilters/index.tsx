@@ -1,11 +1,6 @@
 import { Button, Stack, TextField } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  DateRange,
-  ResetQueryState,
-  generateDateRangeObj,
-  resetQuery,
-} from '@octotread/services/search-query'
+import { ResetQueryState, generateDateRangeObj, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
 import { LanguageSelection } from './LanguageSelection'
 import { TimeFilter } from './TimeFilter'
@@ -15,6 +10,7 @@ import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ObjectSchema, object, string, array, number } from 'yup'
+import { DateRange } from '@octotread/models/dateRange'
 
 const schema: ObjectSchema<ResetQueryState> = object({
   searchText: string().optional(),

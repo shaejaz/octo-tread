@@ -27,7 +27,6 @@ const transform = (res: SearchRepositoriesQuery) => {
 }
 
 export type SearchRepositoryResult = NonNullable<ReturnType<typeof transform>>
-export type Repository = SearchRepositoryResult['repositories'][0]
 
 export const enhancedGraphQlApi = graphqlApi.enhanceEndpoints({
   endpoints: {

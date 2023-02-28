@@ -9,23 +9,10 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns'
-import { enhancedGraphQlApi, Repository, SearchRepositoryResult } from './api'
-
-export type DateRange = 'daily' | 'weekly' | 'monthly'
-
-export interface DateRangeObj {
-  start: number
-  end: number
-}
-
-export interface RepoGroup {
-  dateRange: {
-    start: number
-    end: number
-  }
-  repos: Repository[]
-  totalRepos: number
-}
+import { enhancedGraphQlApi, SearchRepositoryResult } from './api'
+import { DateRange } from '@octotread/models/dateRange'
+import { DateStartEnd } from '@octotread/models/dateStartEnd'
+import { RepositoryGroup } from '@octotread/models/repositoryGroup'
 
 export interface SearchQueryState {
   searchText?: string
@@ -34,9 +21,9 @@ export interface SearchQueryState {
   dateRange: DateRange
   topics: string[] // TODO: convert to list of Topics
   sort: string
-  datesToFetch: DateRangeObj[]
+  datesToFetch: DateStartEnd[]
   itemsPerPage: number
-  repositories: RepoGroup[]
+  repositories: RepositoryGroup[]
 }
 
 export type ResetQueryState = Pick<
@@ -46,7 +33,7 @@ export type ResetQueryState = Pick<
 
 export interface ResetQueryPayload {
   state: ResetQueryState
-  newDateObj: DateRangeObj
+  newDateObj: DateStartEnd
 }
 
 const initialState: SearchQueryState = {
@@ -62,7 +49,7 @@ const initialState: SearchQueryState = {
 }
 
 // TODO: Move functions to utils
-export function generateDateRangeObj(dateRange: DateRange, obj?: DateRangeObj) {
+export function generateDateRangeObj(dateRange: DateRange, obj?: DateStartEnd) {
   const start = obj ? fromUnixTime(obj.start) : new Date()
 
   let fn: ((date: Date | number, amount: number) => Date) | null = null
@@ -86,7 +73,7 @@ export function generateDateRangeObj(dateRange: DateRange, obj?: DateRangeObj) {
   }
 }
 
-export function normalizeDateRangeToStartOfDay(obj: DateRangeObj): DateRangeObj {
+export function normalizeDateRangeToStartOfDay(obj: DateStartEnd): DateStartEnd {
   const start = fromUnixTime(obj.start)
   const end = fromUnixTime(obj.end)
 
@@ -96,11 +83,11 @@ export function normalizeDateRangeToStartOfDay(obj: DateRangeObj): DateRangeObj 
   }
 }
 
-export function getOldestDateRange(d: DateRangeObj[]) {
+export function getOldestDateRange(d: DateStartEnd[]) {
   return d.length ? d[d.length - 1] : null
 }
 
-export function generateQueryFn(state: SearchQueryState, dateRange: DateRangeObj) {
+export function generateQueryFn(state: SearchQueryState, dateRange: DateStartEnd) {
   const queries = []
 
   queries.push(state.searchText ?? '')
@@ -134,7 +121,7 @@ export const searchQuerySlice = createSlice({
     setStars: (state, action: PayloadAction<number | undefined>) => {
       state.stars = action.payload ?? 0
     },
-    appendDateToFetch: (state, action: PayloadAction<DateRangeObj>) => {
+    appendDateToFetch: (state, action: PayloadAction<DateStartEnd>) => {
       const d = getOldestDateRange(state.datesToFetch)
       const nd = d ? normalizeDateRangeToStartOfDay(d) : null
 

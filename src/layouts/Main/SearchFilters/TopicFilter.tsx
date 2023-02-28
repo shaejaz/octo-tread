@@ -1,5 +1,6 @@
 import { Autocomplete, TextField, debounce } from '@mui/material'
-import { Topic, TopicSearchQuery, useLazySearchTopicQuery } from '@octotread/services/api'
+import { Topic } from '@octotread/models/topic'
+import { TopicSearchQuery, useLazySearchTopicQuery } from '@octotread/services/api'
 import { useState, useEffect, useMemo } from 'react'
 
 const defaultTopicQuery: TopicSearchQuery = {
@@ -68,7 +69,7 @@ export function TopicFilter(props: Props) {
         props.handleValueChange(newValue.map((i) => i.name))
       }}
       isOptionEqualToValue={(option, value) => option.name === value.name}
-      getOptionLabel={(option) => option.display_name}
+      getOptionLabel={(option) => option.display_name || option.name}
       options={result.data?.items || []}
       filterOptions={(x) => x}
       loading={result.isLoading}

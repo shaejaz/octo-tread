@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material'
 import { RepoCard } from './Card'
-import { Repository } from '@octotread/services/api'
+import { Repository } from '@octotread/models/repository'
 
 interface Props {
   repos: Repository[]

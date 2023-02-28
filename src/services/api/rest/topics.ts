@@ -1,25 +1,11 @@
+import { Topic } from '@octotread/models/topic'
 import { restApi } from '..'
 
-// TODO: use response schema to generate these: https://docs.github.com/en/rest/search?apiVersion=2022-11-28#search-topics
 export interface TopicSearchQuery {
   text?: string
   curated?: boolean
   featured?: boolean
   repositories?: number
-}
-
-export interface Topic {
-  name: string
-  display_name: string
-  short_description: string
-  description: string
-  created_by: string
-  released: string
-  created_at: string
-  updated_at: string
-  featured: boolean
-  curated: boolean
-  score: number
 }
 
 export interface SearchTopicResponse {

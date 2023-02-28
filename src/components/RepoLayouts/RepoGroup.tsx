@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Pagination } from '@octotread/layouts/Main/Pagination'
 import { GridLayout } from './Grid'
-import { RepoGroup as RepoGroupModel, generateQueryFn } from '@octotread/services/search-query'
+import { generateQueryFn } from '@octotread/services/search-query'
 import { useSelector } from 'react-redux'
 import { RootState } from '@octotread/services/store'
 import { Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
 import { SearchRepositoryResult, useLazySearchRepositoriesQuery } from '@octotread/services/api'
+import { RepositoryGroup } from '@octotread/models/repositoryGroup'
 
 interface Props {
-  repoGroup: RepoGroupModel
+  repoGroup: RepositoryGroup
 }
 
 function getCursor(i: number) {

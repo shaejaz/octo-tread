@@ -2,6 +2,7 @@ import { parse } from 'yaml'
 import { get } from 'https'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
+import { Languages as SavedLanguageFormat } from '@octotread/models/language'
 
 const languagesUrl =
   'https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml'
@@ -35,12 +36,6 @@ interface Language {
 
 interface LanguageFormat {
   [key: string]: Language
-}
-
-interface SavedLanguageFormat {
-  [key: string]: Pick<Language, 'color'> & {
-    slug: string
-  }
 }
 
 const outputDir = 'resources/languages'

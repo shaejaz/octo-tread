@@ -1,5 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import { DateRange } from '@octotread/services/search-query'
+import { DateRange } from '@octotread/models/dateRange'
 
 interface Props {
   value: DateRange

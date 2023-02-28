@@ -1,11 +1,5 @@
+import { Languages } from '@octotread/models/language'
 import { restApi } from '..'
-
-export interface Languages {
-  [key: string]: {
-    slug: string
-    color?: string
-  }
-}
 
 export const languagesApi = restApi.injectEndpoints({
   endpoints: (builder) => ({
