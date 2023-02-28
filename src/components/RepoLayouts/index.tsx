@@ -17,7 +17,7 @@ export function RepoLayouts() {
         start: getUnixTime(subWeeks(new Date(), 1)),
       }),
     )
-  }, [])
+  }, [dispatch])
 
   return (
     <>

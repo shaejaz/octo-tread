@@ -1,6 +1,6 @@
 import { Autocomplete, Button, Stack, TextField } from '@mui/material'
 import { useLazyGetAllQuery, useLazyGetPopularQuery } from '@octotread/services/api/rest/languages'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface Props {
   value: string[]
@@ -14,9 +14,12 @@ export function LanguageSelection(props: Props) {
   const [triggerGetAll, resultGetAll] = useLazyGetAllQuery()
   const [triggerGetPopular, resultGetPopular] = useLazyGetPopularQuery()
 
-  const getLanguage = (key: string) => {
-    return isAllLanguages ? resultGetAll.data?.[key] : resultGetPopular.data?.[key]
-  }
+  const getLanguage = useCallback(
+    (key: string) => {
+      return isAllLanguages ? resultGetAll.data?.[key] : resultGetPopular.data?.[key]
+    },
+    [isAllLanguages, resultGetAll.data, resultGetPopular.data],
+  )
 
   const optionsToDisplay = useMemo(
     () => Object.keys((isAllLanguages ? resultGetAll.data : resultGetPopular.data) || {}),
@@ -28,17 +31,17 @@ export function LanguageSelection(props: Props) {
       return optionsToDisplay.filter((i) => props.value.some((n) => n === getLanguage(i)?.slug))
     }
     return []
-  }, [props.value, optionsToDisplay])
+  }, [props.value, optionsToDisplay, getLanguage])
 
   useEffect(() => {
     triggerGetPopular()
-  }, [])
+  }, [triggerGetPopular])
 
   useEffect(() => {
     if (isAllLanguages) {
       triggerGetAll()
     }
-  }, [isAllLanguages])
+  }, [isAllLanguages, triggerGetAll])
 
   return (
     <Stack direction='row'>

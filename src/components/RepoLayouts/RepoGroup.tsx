@@ -49,7 +49,7 @@ export function RepoGroup(props: Props) {
       reposfirst: state.itemsPerPage,
       after: getCursor((page - 1) * state.itemsPerPage),
     })
-  }, [page, state.itemsPerPage])
+  }, [page, state.itemsPerPage, props.repoGroup.dateRange, state, trigger])
 
   return (
     <>

@@ -62,7 +62,7 @@ export function SearchFilters() {
 
   useEffect(() => {
     trigger()
-  }, [])
+  }, [trigger])
 
   useEffect(() => {
     if (isSubmitSuccessful) {

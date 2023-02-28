@@ -35,13 +35,13 @@ export function TopicFilter(props: Props) {
       return result.data.items.filter((i) => props.value.some((n) => n === i.name))
     }
     return []
-  }, [props.value])
+  }, [props.value, result.data])
 
   useEffect(() => {
     if (open && searchValue === '') {
       trigger({ q: defaultTopicQuery })
     }
-  }, [open])
+  }, [open, searchValue, trigger])
 
   useEffect(() => {
     if (searchValue === '') return
