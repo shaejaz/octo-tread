@@ -28,11 +28,11 @@ export interface RepoGroup {
 }
 
 export interface SearchQueryState {
-  searchText: string
+  searchText?: string
   language: string[]
   stars: number
   dateRange: DateRange
-  topics: string[]
+  topics: string[] // TODO: convert to list of Topics
   sort: string
   datesToFetch: DateRangeObj[]
   itemsPerPage: number
@@ -50,7 +50,7 @@ export interface ResetQueryPayload {
 }
 
 const initialState: SearchQueryState = {
-  searchText: '',
+  searchText: undefined,
   language: [],
   stars: 20,
   dateRange: 'weekly',

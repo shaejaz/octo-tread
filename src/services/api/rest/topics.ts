@@ -1,5 +1,6 @@
 import { restApi } from '..'
 
+// TODO: use response schema to generate these: https://docs.github.com/en/rest/search?apiVersion=2022-11-28#search-topics
 export interface TopicSearchQuery {
   text?: string
   curated?: boolean

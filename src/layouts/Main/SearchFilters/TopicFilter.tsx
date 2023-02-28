@@ -8,7 +8,7 @@ const defaultTopicQuery: TopicSearchQuery = {
 
 interface Props {
   value: string[]
-  handleValueChange: (v: Topic[]) => void
+  handleValueChange: (v: string[]) => void
 }
 
 export function TopicFilter(props: Props) {
@@ -65,7 +65,7 @@ export function TopicFilter(props: Props) {
         setSearchValue(newInputValue)
       }}
       onChange={(event: unknown, newValue: Topic[]) => {
-        props.handleValueChange(newValue)
+        props.handleValueChange(newValue.map((i) => i.name))
       }}
       isOptionEqualToValue={(option, value) => option.name === value.name}
       getOptionLabel={(option) => option.display_name}

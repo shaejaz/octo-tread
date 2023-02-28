@@ -12,6 +12,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@hookform/resolvers": "^2.9.11",
     "@mui/material": "^5.11.2",
     "@reduxjs/toolkit": "^1.9.1",
     "@rtk-query/graphql-request-base-query": "^2.2.0",
@@ -19,8 +20,11 @@
     "graphql-request": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.2",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.4.3"
+    "react-router-dom": "^6.4.3",
+    "yup": "^1.0.1",
+    "zod": "^3.20.6"
   },
   "devDependencies": {
     "@graphql-codegen/add": "^4.0.0",
