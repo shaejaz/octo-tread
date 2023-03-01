@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Pagination } from '@octotread/layouts/Main/Pagination'
 import { GridLayout } from './Grid'
-import { generateQueryFn } from '@octotread/services/search-query'
 import { useSelector } from 'react-redux'
 import { RootState } from '@octotread/services/store'
 import { Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
 import { SearchRepositoryResult, useLazySearchRepositoriesQuery } from '@octotread/services/api'
 import { RepositoryGroup } from '@octotread/models/repositoryGroup'
+import { generateQueryFn } from '@octotread/utils/generateQuery'
 
 interface Props {
   repoGroup: RepositoryGroup

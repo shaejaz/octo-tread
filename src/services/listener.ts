@@ -1,8 +1,8 @@
 import { createListenerMiddleware, addListener } from '@reduxjs/toolkit'
 import type { TypedStartListening, TypedAddListener } from '@reduxjs/toolkit'
 import type { RootState, AppDispatch } from './store'
-import { generateQueryFn } from './search-query'
 import { enhancedGraphQlApi } from './api'
+import { generateQueryFn } from '@octotread/utils/generateQuery'
 
 export const listenerMiddleware = createListenerMiddleware()
 
