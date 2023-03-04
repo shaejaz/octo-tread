@@ -50,19 +50,27 @@ export function RepoGroup(props: Props) {
       reposfirst: state.itemsPerPage,
       after: getCursor((page - 1) * state.itemsPerPage),
     })
-  }, [page, state.itemsPerPage, props.repoGroup.dateRange, state, trigger])
+    // otherwise trigger will be called whenever any group changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page])
 
   return (
     <>
       <Typography variant='h4'>{header}</Typography>
 
-      <GridLayout
-        repos={
-          page !== 1 && result.data
-            ? (result.data as unknown as SearchRepositoryResult).repositories
-            : props.repoGroup.repos
-        }
-      />
+      {page !== 1 && result.isFetching && <Typography variant='h5'>Loading!</Typography>}
+
+      {page !== 1 && result.isError && <Typography variant='h5'>Error!</Typography>}
+
+      {(page === 1 || !(result.isError || result.isFetching)) && (
+        <GridLayout
+          repos={
+            page !== 1 && result.data
+              ? (result.data as unknown as SearchRepositoryResult).repositories
+              : props.repoGroup.repos
+          }
+        />
+      )}
       <Pagination currentPage={page} numPages={numPages} handlePageChange={handleChange} />
     </>
   )

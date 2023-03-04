@@ -9,6 +9,12 @@ import {
   getOldestDateRange,
   normalizeDateStartEnd,
 } from '@octotread/utils/dates'
+import { extractCursorNumber } from '@octotread/utils/cursor'
+
+export interface RepositoriesState {
+  state: 'loading' | 'error' | 'done'
+  data: RepositoryGroup[]
+}
 
 export interface SearchQueryState {
   searchText?: string
@@ -19,7 +25,7 @@ export interface SearchQueryState {
   sort: string
   datesToFetch: DateStartEnd[]
   itemsPerPage: number
-  repositories: RepositoryGroup[]
+  repositories: RepositoriesState
 }
 
 export type ResetQueryState = Pick<
@@ -41,7 +47,10 @@ const initialState: SearchQueryState = {
   sort: 'stars-desc',
   itemsPerPage: 9,
   datesToFetch: [],
-  repositories: [],
+  repositories: {
+    state: 'done',
+    data: [],
+  },
 }
 
 export const searchQuerySlice = createSlice({
@@ -77,7 +86,7 @@ export const searchQuerySlice = createSlice({
       state.datesToFetch.push(normalizeDateStartEnd(obj))
     },
     setDateRange: (state, action: PayloadAction<DateRange>) => {
-      state.repositories = []
+      state.repositories = { state: 'loading', data: [] }
       state.dateRange = action.payload
 
       // TODO: Remove use to `new Date()` in this reducer
@@ -94,35 +103,45 @@ export const searchQuerySlice = createSlice({
       const s = { ...state, ...action.payload.state }
 
       s.datesToFetch = [normalizeDateStartEnd(action.payload.newDateObj)]
-      s.repositories = []
+      s.repositories = { state: 'loading', data: [] }
       return s
     },
   },
   extraReducers: (builder) => {
-    builder.addMatcher(
-      enhancedGraphQlApi.endpoints.SearchRepositories.matchFulfilled,
-      (state, action) => {
-        const d = getOldestDateRange(state.datesToFetch)
-        if (!d) return
+    builder
+      .addMatcher(
+        enhancedGraphQlApi.endpoints.SearchRepositories.matchFulfilled,
+        (state, action) => {
+          const d = getOldestDateRange(state.datesToFetch)
+          if (!d) return
 
-        if (
-          state.repositories.findIndex(
-            (r) => r.dateRange.start === d.start && r.dateRange.end === d.end,
-          ) === -1
-        ) {
-          const p = action.payload as never as SearchRepositoryResult
+          if (
+            state.repositories.data.findIndex(
+              (r) => r.dateRange.start === d.start && r.dateRange.end === d.end,
+            ) === -1
+          ) {
+            const p = action.payload as never as SearchRepositoryResult
 
-          state.repositories = [
-            ...state.repositories,
-            {
+            state.repositories.state = 'done'
+            state.repositories.data.push({
               dateRange: state.datesToFetch[state.datesToFetch.length - 1],
               repos: p.repositories,
               totalRepos: p.repositoryCount,
-            },
-          ]
+            })
+          }
+        },
+      )
+      .addMatcher(enhancedGraphQlApi.endpoints.SearchRepositories.matchPending, (state, action) => {
+        if (
+          !action.meta.arg.originalArgs.after ||
+          extractCursorNumber(action.meta.arg.originalArgs.after) <= 1
+        ) {
+          state.repositories.state = 'loading'
         }
-      },
-    )
+      })
+      .addMatcher(enhancedGraphQlApi.endpoints.SearchRepositories.matchRejected, (state) => {
+        state.repositories.state = 'error'
+      })
   },
 })
 
