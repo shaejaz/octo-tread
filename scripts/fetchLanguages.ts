@@ -4,6 +4,7 @@ import { writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
 import { Languages as SavedLanguageFormat } from '@octotread/models/language'
 
+// TODO: add to GitHub variables
 const languagesUrl =
   'https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml'
 const popularUrl =

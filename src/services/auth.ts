@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
+export const defaultToken = import.meta.env.VITE_GITHUB_KEY
+
 export interface AuthState {
   token: string
 }
 
 const initialState: AuthState = {
-  token: import.meta.env.VITE_GITHUB_KEY,
+  token: defaultToken,
 }
 
 export const authSlice = createSlice({

@@ -34,6 +34,7 @@
     "@graphql-codegen/typescript": "^3.0.0",
     "@graphql-codegen/typescript-operations": "^3.0.0",
     "@graphql-codegen/typescript-rtk-query": "^2.4.1",
+    "@iconify/react": "^4.1.0",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
