@@ -2,7 +2,12 @@ import { DateStartEnd } from '@octotread/models/dateStartEnd'
 import { SearchQueryState } from '@octotread/services/search-query'
 import { format, fromUnixTime } from 'date-fns'
 
-export function generateQueryFn(state: SearchQueryState, dateRange: DateStartEnd) {
+export type GenerateQueryState = Pick<
+  SearchQueryState,
+  'searchText' | 'language' | 'stars' | 'topics' | 'sort'
+>
+
+export function generateQueryString(state: GenerateQueryState, dateStartEnd: DateStartEnd) {
   const queries = []
 
   queries.push(state.searchText ?? '')
@@ -11,8 +16,8 @@ export function generateQueryFn(state: SearchQueryState, dateRange: DateStartEnd
 
   queries.push(state.stars ? `stars:>${state.stars}` : '')
   queries.push(
-    `created:${format(fromUnixTime(dateRange.start), 'yyyy-MM-dd')}..${format(
-      fromUnixTime(dateRange.end),
+    `created:${format(fromUnixTime(dateStartEnd.start), 'yyyy-MM-dd')}..${format(
+      fromUnixTime(dateStartEnd.end),
       'yyyy-MM-dd',
     )}`,
   )

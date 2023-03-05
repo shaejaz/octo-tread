@@ -2,7 +2,7 @@ import { createListenerMiddleware, addListener } from '@reduxjs/toolkit'
 import type { TypedStartListening, TypedAddListener } from '@reduxjs/toolkit'
 import type { RootState, AppDispatch } from './store'
 import { enhancedGraphQlApi } from './api'
-import { generateQueryFn } from '@octotread/utils/generateQuery'
+import { generateQueryString } from '@octotread/utils/generateQuery'
 
 export const listenerMiddleware = createListenerMiddleware()
 
@@ -18,7 +18,7 @@ startAppListening({
   },
   effect: async (action, listenerApi) => {
     const state = listenerApi.getState().searchquery
-    const q = generateQueryFn(state, state.datesToFetch[state.datesToFetch.length - 1])
+    const q = generateQueryString(state, state.datesToFetch[state.datesToFetch.length - 1])
 
     listenerApi.dispatch(
       enhancedGraphQlApi.endpoints.SearchRepositories.initiate(

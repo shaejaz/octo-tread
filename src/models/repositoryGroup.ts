@@ -1,10 +1,8 @@
+import { DateStartEnd } from './dateStartEnd'
 import { Repository } from './repository'
 
 export interface RepositoryGroup {
-  dateRange: {
-    start: number
-    end: number
-  }
+  dateStartEnd: DateStartEnd
   repos: Repository[]
   totalRepos: number
 }

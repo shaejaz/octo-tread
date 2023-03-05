@@ -7,14 +7,11 @@ import { Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
 import { SearchRepositoryResult, useLazySearchRepositoriesQuery } from '@octotread/services/api'
 import { RepositoryGroup } from '@octotread/models/repositoryGroup'
-import { generateQueryFn } from '@octotread/utils/generateQuery'
+import { getCursor } from '@octotread/utils/cursor'
+import { useGenerateQueryString } from 'hooks/useGenerateQueryString'
 
 interface Props {
   repoGroup: RepositoryGroup
-}
-
-function getCursor(i: number) {
-  return btoa(`cursor:${i}`)
 }
 
 // TODO: Rename and fix structure of components
@@ -22,12 +19,15 @@ export function RepoGroup(props: Props) {
   const [page, setPage] = useState(1)
   const [trigger, result] = useLazySearchRepositoriesQuery()
 
+  const queryString = useGenerateQueryString(props.repoGroup.dateStartEnd)
+  const itemsPerPage = useSelector((state: RootState) => state.searchquery.itemsPerPage)
+
   const header = useMemo(() => {
-    const start = format(fromUnixTime(props.repoGroup.dateRange.end), 'do MMM, yyyy')
-    const end = format(fromUnixTime(props.repoGroup.dateRange.start), 'do MMM, yyyy')
+    const start = format(fromUnixTime(props.repoGroup.dateStartEnd.end), 'do MMM, yyyy')
+    const end = format(fromUnixTime(props.repoGroup.dateStartEnd.start), 'do MMM, yyyy')
 
     return `${end} - ${start}`
-  }, [props.repoGroup.dateRange])
+  }, [props.repoGroup.dateStartEnd])
 
   const numPages = useMemo(() => {
     if (!props.repoGroup.repos) return 0
@@ -35,24 +35,22 @@ export function RepoGroup(props: Props) {
     return Math.ceil(props.repoGroup.totalRepos / props.repoGroup.repos.length)
   }, [props.repoGroup])
 
-  const handleChange = (value: number) => {
-    setPage(value)
-  }
-
-  const state = useSelector((state: RootState) => state.searchquery)
-
+  // TODO: switch to using paginated repos in state
   useEffect(() => {
     if (page === 1) return
 
-    const q = generateQueryFn(state, props.repoGroup.dateRange)
     trigger({
-      q: q,
-      reposfirst: state.itemsPerPage,
-      after: getCursor((page - 1) * state.itemsPerPage),
+      q: queryString,
+      reposfirst: itemsPerPage,
+      after: getCursor((page - 1) * itemsPerPage),
     })
     // otherwise trigger will be called whenever any group changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page])
+
+  const handleChange = (value: number) => {
+    setPage(value)
+  }
 
   return (
     <>

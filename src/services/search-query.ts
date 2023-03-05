@@ -117,14 +117,14 @@ export const searchQuerySlice = createSlice({
 
           if (
             state.repositories.data.findIndex(
-              (r) => r.dateRange.start === d.start && r.dateRange.end === d.end,
+              (r) => r.dateStartEnd.start === d.start && r.dateStartEnd.end === d.end,
             ) === -1
           ) {
             const p = action.payload as never as SearchRepositoryResult
 
             state.repositories.state = 'done'
             state.repositories.data.push({
-              dateRange: state.datesToFetch[state.datesToFetch.length - 1],
+              dateStartEnd: state.datesToFetch[state.datesToFetch.length - 1],
               repos: p.repositories,
               totalRepos: p.repositoryCount,
             })
