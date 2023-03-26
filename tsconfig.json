@@ -35,6 +35,9 @@
       ],
       "@octotread/utils/*": [
         "utils/*"
+      ],
+      "@octotread/theme/*": [
+        "theme/*"
       ]
     }
   },
