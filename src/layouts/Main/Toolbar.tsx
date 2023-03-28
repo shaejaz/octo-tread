@@ -15,6 +15,7 @@ import {
   Stack,
   TextField,
   Typography,
+  styled,
 } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { useIsDefaultTokenSet } from 'hooks/useIsDefaultToken'
@@ -25,6 +26,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken } from '@octotread/services/auth'
 import { RootState } from '@octotread/services/store'
+
+const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  paddingTop: theme.spacing(2),
+  boxShadow: 'none',
+  transition: 'none',
+  '& .MuiContainer-root': {
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: theme.shape.borderRadius,
+  },
+}))
 
 const accessTokenSchema = object({
   token: string().required('Token needs to be set'),
@@ -82,7 +94,7 @@ export function Toolbar() {
   }
 
   return (
-    <AppBar position='sticky'>
+    <OctotreadAppBar position='sticky'>
       <Container maxWidth='lg'>
         <MuiToolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Typography variant='h5'>Octotread</Typography>
@@ -156,6 +168,6 @@ export function Toolbar() {
           </Button>
         </DialogActions>
       </Dialog>
-    </AppBar>
+    </OctotreadAppBar>
   )
 }

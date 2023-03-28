@@ -1,15 +1,11 @@
 import { createTheme } from '@mui/material'
+import { palette } from './palette'
+import { typography } from './typography'
 
 export const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#3c0c75',
-    },
-    secondary: {
-      main: '#125271',
-    },
-    info: {
-      main: '#8643f7',
-    },
+  palette: palette,
+  typography: typography,
+  shape: {
+    borderRadius: 10,
   },
 })
