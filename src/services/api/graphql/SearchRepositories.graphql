@@ -7,7 +7,9 @@ query SearchRepositories($q: String!, $reposfirst: Int!, $type: SearchType = REP
         description
         stargazerCount
         owner {
+          url
           login
+          avatarUrl
         }
         languages(first: $langFirst) {
           nodes {
