@@ -1,4 +1,5 @@
-import { Avatar, Box, Card, CardContent, CardProps, Stack, Typography } from '@mui/material'
+import { Avatar, Box, Card, CardContent, CardProps, Chip, Stack, Typography } from '@mui/material'
+import { LanguageChip } from '@octotread/components/LanguageChip'
 import { StarGazersChip } from '@octotread/components/StarGazersChip'
 import { TruncatedText } from '@octotread/components/TruncatedText'
 import { Repository } from '@octotread/models/repository'
@@ -27,12 +28,22 @@ export function RepoCard(props: RepoCardProps) {
           <TruncatedText lines={4}>{repo.description}</TruncatedText>
         </Box>
 
-        <Stack direction='row' alignItems='center'>
+        <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <StarGazersChip stars={repo.stargazerCount} />
-          {/* TODO: replace with just badges of logos */}
-          <Typography>
-            {repo.languages?.nodes?.reduce((a, c) => (c?.name ? a + ' ' + c.name : ''), '')}
-          </Typography>
+
+          {/* TODO: add color borders and expansion */}
+          <Stack direction='row' spacing={1}>
+            {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 0 && (
+              <LanguageChip
+                name={repo.languages?.nodes[0]?.name || ''}
+                languageColor={repo.languages?.nodes[0]?.color || ''}
+              />
+            )}
+
+            {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 1 && (
+              <Chip label='...' size='small' sx={{ px: 0.5 }} />
+            )}
+          </Stack>
         </Stack>
       </CardContent>
     </Card>

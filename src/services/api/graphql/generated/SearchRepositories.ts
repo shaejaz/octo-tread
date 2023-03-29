@@ -22,7 +22,7 @@ export type SearchRepositoriesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository', id: string, name: string, description?: string | null, stargazerCount: number, owner: { __typename?: 'Organization', url: any, login: string, avatarUrl: any } | { __typename?: 'User', url: any, login: string, avatarUrl: any }, languages?: { __typename?: 'LanguageConnection', nodes?: Array<{ __typename?: 'Language', name: string } | null> | null } | null, repositoryTopics: { __typename?: 'RepositoryTopicConnection', nodes?: Array<{ __typename?: 'RepositoryTopic', topic: { __typename?: 'Topic', name: string, id: string } } | null> | null } } | { __typename?: 'User' } | null> | null } };
+export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository', id: string, name: string, description?: string | null, stargazerCount: number, owner: { __typename?: 'Organization', url: any, login: string, avatarUrl: any } | { __typename?: 'User', url: any, login: string, avatarUrl: any }, languages?: { __typename?: 'LanguageConnection', nodes?: Array<{ __typename?: 'Language', color?: string | null, name: string } | null> | null } | null, repositoryTopics: { __typename?: 'RepositoryTopicConnection', nodes?: Array<{ __typename?: 'RepositoryTopic', topic: { __typename?: 'Topic', name: string, id: string } } | null> | null } } | { __typename?: 'User' } | null> | null } };
 
 
 export const SearchRepositoriesDocument = `
@@ -41,6 +41,7 @@ export const SearchRepositoriesDocument = `
         }
         languages(first: $langFirst) {
           nodes {
+            color
             name
           }
         }

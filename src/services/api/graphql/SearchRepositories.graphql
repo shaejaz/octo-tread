@@ -13,6 +13,7 @@ query SearchRepositories($q: String!, $reposfirst: Int!, $type: SearchType = REP
         }
         languages(first: $langFirst) {
           nodes {
+            color
             name
           }
         }
