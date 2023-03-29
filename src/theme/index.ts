@@ -1,3 +1,4 @@
+import { components } from './components/index'
 import { createTheme } from '@mui/material'
 import { palette } from './palette'
 import { typography } from './typography'
@@ -8,4 +9,5 @@ export const theme = createTheme({
   shape: {
     borderRadius: 10,
   },
+  components: components,
 })

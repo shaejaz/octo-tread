@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from '@mui/material'
+import { Button, Stack } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResetQueryState, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
@@ -12,6 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { ObjectSchema, object, string, array, number } from 'yup'
 import { DateRange } from '@octotread/models/dateRange'
 import { generateDateStartEnd } from '@octotread/utils/dates'
+import { Input } from '@octotread/components/Input'
 
 const schema: ObjectSchema<ResetQueryState> = object({
   searchText: string().optional(),
@@ -89,7 +90,7 @@ export function SearchFilters() {
           control={control}
           name='searchText'
           render={({ field, fieldState }) => (
-            <TextField
+            <Input
               label='Search text'
               {...field}
               error={!!fieldState.error}
@@ -111,11 +112,11 @@ export function SearchFilters() {
           name='stars'
           render={({ field, fieldState }) => (
             // TODO: only allow numbers to be entered
-            <TextField
-              placeholder='Min stars'
+            <Input
+              label='Min stars'
+              {...field}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
-              {...field}
             />
           )}
         />
@@ -140,8 +141,8 @@ export function SearchFilters() {
           control={control}
           name='itemsPerPage'
           render={({ field, fieldState }) => (
-            <TextField
-              placeholder='Number of repositories per page'
+            <Input
+              label='Items per page'
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
               {...field}
