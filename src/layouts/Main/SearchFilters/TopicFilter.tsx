@@ -1,4 +1,13 @@
-import { Autocomplete, TextField, debounce } from '@mui/material'
+import {
+  Box,
+  BoxProps,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Stack,
+  debounce,
+} from '@mui/material'
+import { Autocomplete } from '@octotread/components/Autocomplete'
 import { Topic } from '@octotread/models/topic'
 import { TopicSearchQuery, useLazySearchTopicQuery } from '@octotread/services/api'
 import { useState, useEffect, useMemo } from 'react'
@@ -10,6 +19,7 @@ const defaultTopicQuery: TopicSearchQuery = {
 interface Props {
   value: string[]
   handleValueChange: (v: string[]) => void
+  containerProps?: BoxProps
 }
 
 export function TopicFilter(props: Props) {
@@ -50,41 +60,44 @@ export function TopicFilter(props: Props) {
   }, [debouncedTrigger, searchValue])
 
   return (
-    <Autocomplete
-      disablePortal
-      multiple
-      id='topics-search-list'
-      value={_value}
-      open={open}
-      onOpen={() => {
-        setOpen(true)
-      }}
-      onClose={() => {
-        setOpen(false)
-      }}
-      onInputChange={(event, newInputValue) => {
-        setSearchValue(newInputValue)
-      }}
-      onChange={(event: unknown, newValue: Topic[]) => {
-        props.handleValueChange(newValue.map((i) => i.name))
-      }}
-      isOptionEqualToValue={(option, value) => option.name === value.name}
-      getOptionLabel={(option) => option.display_name || option.name}
-      options={result.data?.items || []}
-      filterOptions={(x) => x}
-      loading={result.isLoading}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label='Topics'
-          InputProps={{
-            ...params.InputProps,
-            endAdornment: <>{params.InputProps.endAdornment}</>,
-          }}
-        />
-      )}
-      // TODO: Add additional filtering for featured/curated etc.
-      // TODO: Add topic logos
-    />
+    <Box {...props.containerProps}>
+      <Autocomplete
+        disablePortal
+        multiple
+        id='topics-search-list'
+        value={_value}
+        open={open}
+        onOpen={() => {
+          setOpen(true)
+        }}
+        onClose={() => {
+          setOpen(false)
+        }}
+        onInputChange={(event, newInputValue) => {
+          setSearchValue(newInputValue)
+        }}
+        onChange={(event: unknown, newValue: Topic[]) => {
+          props.handleValueChange(newValue.map((i) => i.name))
+        }}
+        isOptionEqualToValue={(option, value) => option.name === value.name}
+        getOptionLabel={(option) => option.display_name || option.name}
+        options={result.data?.items || []}
+        filterOptions={(x) => x}
+        loading={result.isLoading}
+        customInputProps={{
+          placeholder: 'Select topics',
+          label: 'Topics',
+        }}
+        renderHeader={
+          <Stack direction='column' px={2} py={1}>
+            <FormGroup>
+              <FormControlLabel control={<Checkbox />} label='Featured' />
+            </FormGroup>
+          </Stack>
+        }
+        // TODO: Add additional filtering for featured/curated etc.
+        // TODO: Add topic logos
+      />
+    </Box>
   )
 }

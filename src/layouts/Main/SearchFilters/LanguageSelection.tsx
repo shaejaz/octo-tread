@@ -1,8 +1,10 @@
-import { Autocomplete, Button, Stack, TextField } from '@mui/material'
+import { Button, Stack, StackProps } from '@mui/material'
+import { Autocomplete } from '@octotread/components/Autocomplete'
 import { useLazyGetAllQuery, useLazyGetPopularQuery } from '@octotread/services/api/rest/languages'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface Props {
+  containerProps?: StackProps
   value: string[]
   handleValueChange: (s: string[]) => void
 }
@@ -44,11 +46,12 @@ export function LanguageSelection(props: Props) {
   }, [isAllLanguages, triggerGetAll])
 
   return (
-    <Stack direction='row'>
+    <Stack direction='row' {...props.containerProps}>
       <Autocomplete
         disablePortal
         multiple
         id='languages-search-list'
+        sx={{ flex: '1 1 100%' }}
         value={_value}
         open={open}
         onOpen={() => {
@@ -67,19 +70,15 @@ export function LanguageSelection(props: Props) {
         }
         options={optionsToDisplay}
         loading={resultGetAll.isLoading || resultGetPopular.isLoading}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label='Languages'
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: <>{params.InputProps.endAdornment}</>,
-            }}
-          />
-        )}
+        customInputProps={{
+          placeholder: 'Select languages',
+          label: 'Languages',
+        }}
       />
 
-      <Button onClick={() => setIsAllLanguages(true)}>Get All</Button>
+      <Button onClick={() => setIsAllLanguages(true)} sx={{ flex: '0 0 auto' }}>
+        Get All
+      </Button>
     </Stack>
   )
 }

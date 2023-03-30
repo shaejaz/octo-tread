@@ -31,6 +31,10 @@ export const Input = (props: TextFieldProps) => {
       {...rest}
       error={error}
       helperText={''}
+      InputLabelProps={{
+        ...props.InputLabelProps,
+        shrink: true,
+      }}
       InputProps={{
         endAdornment: error && (
           <InputAdornment position='end'>
@@ -45,6 +49,7 @@ export const Input = (props: TextFieldProps) => {
             </Tooltip>
           </InputAdornment>
         ),
+        ...props.InputProps,
       }}
     />
   )

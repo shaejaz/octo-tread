@@ -1,14 +1,22 @@
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+import {
+  FormControl,
+  FormControlProps,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material'
 import { DateRange } from '@octotread/models/dateRange'
 
 interface Props {
   value: DateRange
   handleChange: (n: DateRange) => void
+  containerProps?: FormControlProps
 }
 
 export function TimeFilter(props: Props) {
   return (
-    <FormControl>
+    <FormControl {...props.containerProps}>
       <InputLabel id='date-range-select-label'>Date range</InputLabel>
       <Select
         id='date-range-select'

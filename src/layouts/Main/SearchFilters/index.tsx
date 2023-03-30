@@ -95,6 +95,7 @@ export function SearchFilters() {
               {...field}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
+              sx={{ flex: '1 1 0%' }}
             />
           )}
         />
@@ -103,7 +104,11 @@ export function SearchFilters() {
           control={control}
           name='language'
           render={({ field: { value, onChange } }) => (
-            <LanguageSelection value={value} handleValueChange={(l) => onChange(l)} />
+            <LanguageSelection
+              value={value}
+              handleValueChange={(l) => onChange(l)}
+              containerProps={{ sx: { flex: '0 0 26%' } }}
+            />
           )}
         />
 
@@ -117,6 +122,7 @@ export function SearchFilters() {
               {...field}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
+              sx={{ flex: '1 1 0%' }}
             />
           )}
         />
@@ -125,7 +131,11 @@ export function SearchFilters() {
           control={control}
           name='topics'
           render={({ field: { value, onChange } }) => (
-            <TopicFilter value={value} handleValueChange={(v) => onChange(v)} />
+            <TopicFilter
+              value={value}
+              handleValueChange={(v) => onChange(v)}
+              containerProps={{ sx: { flex: '0 0 18%' } }}
+            />
           )}
         />
 
@@ -133,7 +143,11 @@ export function SearchFilters() {
           control={control}
           name='dateRange'
           render={({ field: { value, onChange } }) => (
-            <TimeFilter value={value} handleChange={(v) => onChange(v)} />
+            <TimeFilter
+              value={value}
+              handleChange={(v) => onChange(v)}
+              containerProps={{ sx: { flex: '0 0 auto' } }}
+            />
           )}
         />
 
@@ -145,6 +159,7 @@ export function SearchFilters() {
               label='Items per page'
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
+              sx={{ flex: '1 1 0%' }}
               {...field}
             />
           )}
