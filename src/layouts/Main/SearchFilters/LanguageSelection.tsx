@@ -1,10 +1,10 @@
-import { Button, Stack, StackProps } from '@mui/material'
+import { Box, BoxProps, Button } from '@mui/material'
 import { Autocomplete } from '@octotread/components/Autocomplete'
 import { useLazyGetAllQuery, useLazyGetPopularQuery } from '@octotread/services/api/rest/languages'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface Props {
-  containerProps?: StackProps
+  containerProps?: BoxProps
   value: string[]
   handleValueChange: (s: string[]) => void
 }
@@ -46,12 +46,11 @@ export function LanguageSelection(props: Props) {
   }, [isAllLanguages, triggerGetAll])
 
   return (
-    <Stack direction='row' {...props.containerProps}>
+    <Box {...props.containerProps}>
       <Autocomplete
         disablePortal
         multiple
         id='languages-search-list'
-        sx={{ flex: '1 1 100%' }}
         value={_value}
         open={open}
         onOpen={() => {
@@ -74,11 +73,14 @@ export function LanguageSelection(props: Props) {
           placeholder: 'Select languages',
           label: 'Languages',
         }}
+        renderHeader={
+          <Box px={2} py={1}>
+            <Button onClick={() => setIsAllLanguages(true)} sx={{ width: '100%' }}>
+              Get All
+            </Button>
+          </Box>
+        }
       />
-
-      <Button onClick={() => setIsAllLanguages(true)} sx={{ flex: '0 0 auto' }}>
-        Get All
-      </Button>
-    </Stack>
+    </Box>
   )
 }

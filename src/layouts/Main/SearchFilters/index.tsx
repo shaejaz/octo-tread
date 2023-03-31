@@ -107,7 +107,7 @@ export function SearchFilters() {
             <LanguageSelection
               value={value}
               handleValueChange={(l) => onChange(l)}
-              containerProps={{ sx: { flex: '0 0 26%' } }}
+              containerProps={{ sx: { flex: '0 0 22%' } }}
             />
           )}
         />
@@ -134,7 +134,7 @@ export function SearchFilters() {
             <TopicFilter
               value={value}
               handleValueChange={(v) => onChange(v)}
-              containerProps={{ sx: { flex: '0 0 18%' } }}
+              containerProps={{ sx: { flex: '0 0 22%' } }}
             />
           )}
         />
