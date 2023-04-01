@@ -68,7 +68,7 @@ export function LanguageSelection(props: Props) {
           getLanguage(option)?.slug === getLanguage(value)?.slug
         }
         options={optionsToDisplay}
-        loading={resultGetAll.isLoading || resultGetPopular.isLoading}
+        loading={resultGetAll.isFetching || resultGetPopular.isFetching}
         customInputProps={{
           placeholder: 'Select languages',
           label: 'Languages',

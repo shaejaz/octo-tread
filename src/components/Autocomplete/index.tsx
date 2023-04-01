@@ -1,4 +1,10 @@
-import { Autocomplete as MuiAutocomplete, AutocompleteProps, TextFieldProps } from '@mui/material'
+import { Icon } from '@iconify/react'
+import {
+  Autocomplete as MuiAutocomplete,
+  AutocompleteProps,
+  TextFieldProps,
+  Stack,
+} from '@mui/material'
 import { Input } from '@octotread/components/Input'
 import { ReactNode } from 'react'
 
@@ -10,7 +16,7 @@ type Props<T> = PartialBy<AutocompleteProps<T, true, false, false>, 'renderInput
 }
 
 export function Autocomplete<T>(props: Props<T>) {
-  const { customInputProps, renderHeader, options, ...rest } = props
+  const { customInputProps, renderHeader, options, loading, ...rest } = props
   let headerOptions = options
 
   if (renderHeader) {
@@ -33,8 +39,21 @@ export function Autocomplete<T>(props: Props<T>) {
       )}
       renderOption={(optionProps, option, state) => {
         if ((option as { header: boolean })['header']) {
-          return <>{renderHeader}</>
+          return (
+            <>
+              {renderHeader}
+              {loading && (
+                <Stack direction='row' justifyContent='center' alignItems='center'>
+                  <Icon icon='eos-icons:loading' width='24' height='24' />
+                </Stack>
+              )}
+            </>
+          )
         } else {
+          if (loading) {
+            return <></>
+          }
+
           return props.renderOption ? (
             props.renderOption(optionProps, option, state)
           ) : (
