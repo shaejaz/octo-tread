@@ -1,8 +1,19 @@
-import { Avatar, Box, Card, CardContent, CardProps, Chip, Stack, Typography } from '@mui/material'
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  CardProps,
+  Chip,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material'
 import { LanguageChip } from '@octotread/components/LanguageChip'
 import { StarGazersChip } from '@octotread/components/StarGazersChip'
 import { TruncatedText } from '@octotread/components/TruncatedText'
 import { Repository } from '@octotread/models/repository'
+import { useCallback, useState } from 'react'
 
 interface RepoCardProps extends CardProps {
   repo: Repository
@@ -11,14 +22,48 @@ interface RepoCardProps extends CardProps {
 export function RepoCard(props: RepoCardProps) {
   const { repo, ...cardProps } = props
 
+  // TODO: possibly convert conditional tooltip to a hook + component
+  const [showHeaderTooltip, setShowHeaderTooltip] = useState(false)
+  const [showSubHeaderTooltip, setShowSubHeaderTooltip] = useState(false)
+
+  const headerRef = useCallback((node: HTMLElement) => {
+    if (node !== null) {
+      setShowHeaderTooltip(node.scrollWidth > node.offsetWidth)
+    }
+  }, [])
+
+  const subHeaderRef = useCallback((node: HTMLElement) => {
+    if (node !== null) {
+      setShowSubHeaderTooltip(node.scrollWidth > node.offsetWidth)
+    }
+  }, [])
+
   return (
     <Card sx={{ height: '16rem' }} {...cardProps}>
       <CardContent sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
         {/* TODO: change layout for smaller screens */}
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
-          <Stack direction='column'>
-            <Typography variant='h6'>{repo.name}</Typography>
-            <Typography variant='subtitle2'>{repo.owner.login}</Typography>
+          <Stack direction='column' pr={2} minWidth={0} flex={'1'}>
+            <Tooltip
+              title={repo.name}
+              placement='top'
+              disableHoverListener={!showHeaderTooltip}
+              disableTouchListener={!showHeaderTooltip}
+            >
+              <Typography variant='h6' noWrap ref={headerRef}>
+                {repo.name}
+              </Typography>
+            </Tooltip>
+            <Tooltip
+              title={repo.owner.login}
+              placement='bottom'
+              disableHoverListener={!showSubHeaderTooltip}
+              disableTouchListener={!showSubHeaderTooltip}
+            >
+              <Typography variant='subtitle2' noWrap ref={subHeaderRef}>
+                {repo.owner.login}
+              </Typography>
+            </Tooltip>
           </Stack>
 
           <Avatar sx={{ width: 40, height: 40 }} src={repo.owner.avatarUrl} />
