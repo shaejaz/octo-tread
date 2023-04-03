@@ -1,4 +1,4 @@
-import { Button, Stack } from '@mui/material'
+import { Button, Stack, Tooltip } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResetQueryState, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
@@ -13,6 +13,7 @@ import { ObjectSchema, object, string, array, number } from 'yup'
 import { DateRange } from '@octotread/models/dateRange'
 import { generateDateStartEnd } from '@octotread/utils/dates'
 import { Input } from '@octotread/components/Input'
+import { Icon } from '@iconify/react'
 
 const schema: ObjectSchema<ResetQueryState> = object({
   searchText: string().optional(),
@@ -84,8 +85,8 @@ export function SearchFilters() {
   }
 
   return (
-    <Stack direction='column' spacing={1}>
-      <Stack direction='row' alignItems='center' spacing={2}>
+    <Stack direction='column' spacing={3}>
+      <Stack direction='row' alignItems='flex-end' justifyContent='flex-end' spacing={2}>
         <Controller
           control={control}
           name='searchText'
@@ -95,11 +96,31 @@ export function SearchFilters() {
               {...field}
               error={!!fieldState.error}
               helperText={fieldState.error?.message}
-              sx={{ flex: '1 1 0%' }}
+              sx={{ flex: '0 1 15rem' }}
             />
           )}
         />
 
+        <Controller
+          control={control}
+          name='dateRange'
+          render={({ field: { value, onChange } }) => (
+            <TimeFilter
+              value={value}
+              handleChange={(v) => onChange(v)}
+              containerProps={{ sx: { flex: '0 0 8rem' } }}
+            />
+          )}
+        />
+
+        <Tooltip title='Show advanced options'>
+          <Button variant='outlined' sx={{ px: 2, py: 2 }}>
+            <Icon icon='material-symbols:arrow-drop-down' width={24} />
+          </Button>
+        </Tooltip>
+      </Stack>
+
+      <Stack direction='row' alignItems='center' spacing={2} display='none'>
         <Controller
           control={control}
           name='language'
@@ -107,7 +128,7 @@ export function SearchFilters() {
             <LanguageSelection
               value={value}
               handleValueChange={(l) => onChange(l)}
-              containerProps={{ sx: { flex: '0 0 22%' } }}
+              containerProps={{ sx: { flex: '0 0 30rem' } }}
             />
           )}
         />
@@ -140,18 +161,6 @@ export function SearchFilters() {
 
         <Controller
           control={control}
-          name='dateRange'
-          render={({ field: { value, onChange } }) => (
-            <TimeFilter
-              value={value}
-              handleChange={(v) => onChange(v)}
-              containerProps={{ sx: { flex: '0 0 auto' } }}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
           name='itemsPerPage'
           render={({ field, fieldState }) => (
             <Input
@@ -166,9 +175,9 @@ export function SearchFilters() {
       </Stack>
 
       {/* TODO: only enable button when form values have actually changed, not just simple dirty check. will require deep compare */}
-      <Button disabled={!isValid || !isDirty} onClick={handleSubmit(handleApplyClick)}>
-        Apply
-      </Button>
+      {/* <Button disabled={!isValid || !isDirty} onClick={handleSubmit(handleApplyClick)}>
+          Apply
+        </Button> */}
     </Stack>
   )
 }

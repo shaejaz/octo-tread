@@ -8,8 +8,10 @@ export function Main() {
     <Box minHeight='100%'>
       <Toolbar />
 
-      <Stack direction='column' spacing={3} component='main' maxWidth='lg' m='auto' px={3} py={6}>
-        <SearchFilters />
+      <Stack direction='column' spacing={3} component='main' maxWidth='lg' m='auto'>
+        <Box pt={4} pb={6}>
+          <SearchFilters />
+        </Box>
         <Outlet />
       </Stack>
     </Box>
