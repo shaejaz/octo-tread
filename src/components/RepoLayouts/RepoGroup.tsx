@@ -4,14 +4,15 @@ import { GridLayout } from './Grid'
 import { useSelector } from 'react-redux'
 import { RootState } from '@octotread/services/store'
 import { Typography } from '@mui/material'
-import { format, fromUnixTime } from 'date-fns'
 import { SearchRepositoryResult, useLazySearchRepositoriesQuery } from '@octotread/services/api'
 import { RepositoryGroup } from '@octotread/models/repositoryGroup'
 import { getCursor } from '@octotread/utils/cursor'
 import { useGenerateQueryString } from 'hooks/useGenerateQueryString'
+import { RepoGroupDateHeader } from '../RepoGroupDateHeader'
 
 interface Props {
   repoGroup: RepositoryGroup
+  showDateHeader?: boolean
 }
 
 // TODO: Rename and fix structure of components
@@ -21,13 +22,6 @@ export function RepoGroup(props: Props) {
 
   const queryString = useGenerateQueryString(props.repoGroup.dateStartEnd)
   const itemsPerPage = useSelector((state: RootState) => state.searchquery.itemsPerPage)
-
-  const header = useMemo(() => {
-    const start = format(fromUnixTime(props.repoGroup.dateStartEnd.end), 'do MMM, yyyy')
-    const end = format(fromUnixTime(props.repoGroup.dateStartEnd.start), 'do MMM, yyyy')
-
-    return `${end} - ${start}`
-  }, [props.repoGroup.dateStartEnd])
 
   const numPages = useMemo(() => {
     if (!props.repoGroup.repos) return 0
@@ -54,7 +48,9 @@ export function RepoGroup(props: Props) {
 
   return (
     <>
-      <Typography variant='h4'>{header}</Typography>
+      {(props.showDateHeader || props.showDateHeader === undefined) && (
+        <RepoGroupDateHeader dateStartEnd={props.repoGroup.dateStartEnd} />
+      )}
 
       {page !== 1 && result.isFetching && <Typography variant='h5'>Loading!</Typography>}
 

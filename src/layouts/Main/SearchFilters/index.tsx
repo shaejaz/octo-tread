@@ -1,4 +1,4 @@
-import { Button, Stack, Tooltip } from '@mui/material'
+import { Button, Paper, Stack, Tooltip } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResetQueryState, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
@@ -14,6 +14,7 @@ import { DateRange } from '@octotread/models/dateRange'
 import { generateDateStartEnd } from '@octotread/utils/dates'
 import { Input } from '@octotread/components/Input'
 import { Icon } from '@iconify/react'
+import { RepoGroupDateHeader } from '@octotread/components/RepoGroupDateHeader'
 
 const schema: ObjectSchema<ResetQueryState> = object({
   searchText: string().optional(),
@@ -37,6 +38,8 @@ export function SearchFilters() {
   const searchDateRange = useSelector((state: RootState) => state.searchquery.dateRange)
   const searchTopics = useSelector((state: RootState) => state.searchquery.topics)
   const repoItemsPerPage = useSelector((state: RootState) => state.searchquery.itemsPerPage)
+
+  const dates = useSelector((state: RootState) => state.searchquery.datesToFetch)
 
   const {
     control,
@@ -86,38 +89,41 @@ export function SearchFilters() {
 
   return (
     <Stack direction='column' spacing={3}>
-      <Stack direction='row' alignItems='flex-end' justifyContent='flex-end' spacing={2}>
-        <Controller
-          control={control}
-          name='searchText'
-          render={({ field, fieldState }) => (
-            <Input
-              label='Search text'
-              {...field}
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              sx={{ flex: '0 1 15rem' }}
-            />
-          )}
-        />
+      <Stack
+        direction='row'
+        alignItems='flex-end'
+        justifyContent={dates.length ? 'space-between' : 'flex-end'}
+      >
+        {dates.length > 0 && <RepoGroupDateHeader dateStartEnd={dates[0]} />}
 
-        <Controller
-          control={control}
-          name='dateRange'
-          render={({ field: { value, onChange } }) => (
-            <TimeFilter
-              value={value}
-              handleChange={(v) => onChange(v)}
-              containerProps={{ sx: { flex: '0 0 8rem' } }}
-            />
-          )}
-        />
+        <Paper component={Stack} direction='row' spacing={2} px={3} py={2}>
+          <Controller
+            control={control}
+            name='searchText'
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label='Search text'
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+                size='small'
+                sx={{ flex: '0 1 15rem' }}
+              />
+            )}
+          />
 
-        <Tooltip title='Show advanced options'>
-          <Button variant='outlined' sx={{ px: 2, py: 2 }}>
-            <Icon icon='material-symbols:arrow-drop-down' width={24} />
-          </Button>
-        </Tooltip>
+          <Controller
+            control={control}
+            name='dateRange'
+            render={({ field: { value, onChange } }) => (
+              <TimeFilter
+                value={value}
+                handleChange={(v) => onChange(v)}
+                containerProps={{ sx: { flex: '0 0 8rem' }, size: 'small' }}
+              />
+            )}
+          />
+        </Paper>
       </Stack>
 
       <Stack direction='row' alignItems='center' spacing={2} display='none'>
