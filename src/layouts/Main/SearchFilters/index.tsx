@@ -1,11 +1,11 @@
-import { Button, Paper, Stack, Tooltip } from '@mui/material'
+import { Box, Button, Collapse, Paper, Stack } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResetQueryState, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
 import { LanguageSelection } from './LanguageSelection'
 import { TimeFilter } from './TimeFilter'
 import { TopicFilter } from './TopicFilter'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 // TODO: gut RHF for custom solution using yup + lodash
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -30,6 +30,8 @@ const schema: ObjectSchema<ResetQueryState> = object({
 })
 
 export function SearchFilters() {
+  const [showFilters, setShowFilters] = useState(false)
+
   const dispatch = useDispatch()
 
   const searchText = useSelector((state: RootState) => state.searchquery.searchText)
@@ -88,102 +90,130 @@ export function SearchFilters() {
   }
 
   return (
-    <Stack direction='column' spacing={3}>
+    <Stack direction='column'>
+      <Collapse in={showFilters}>
+        <Paper component={Stack} direction='column' spacing={3} sx={{ px: 2, pt: 2, pb: 3 }}>
+          <Stack direction='row' justifyContent='space-between' spacing={3}>
+            <Controller
+              control={control}
+              name='searchText'
+              render={({ field, fieldState }) => (
+                <Input
+                  {...field}
+                  label='Search text'
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
+                  sx={{ flex: '0 1 20rem' }}
+                />
+              )}
+            />
+
+            <Stack direction='row' justifyContent='flex-end' spacing={3} flex='0 1 auto'>
+              <Controller
+                control={control}
+                name='dateRange'
+                render={({ field: { value, onChange } }) => (
+                  <TimeFilter
+                    value={value}
+                    handleChange={(v) => onChange(v)}
+                    containerProps={{ sx: { flex: '0 0 8rem' } }}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name='stars'
+                render={({ field, fieldState }) => (
+                  // TODO: only allow numbers to be entered
+                  <Input
+                    {...field}
+                    label='Min stars'
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                    sx={{ flex: '0 1 8rem' }}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name='itemsPerPage'
+                render={({ field, fieldState }) => (
+                  <Input
+                    {...field}
+                    label='Items per page'
+                    error={!!fieldState.error}
+                    helperText={fieldState.error?.message}
+                    sx={{ flex: '0 1 10rem' }}
+                  />
+                )}
+              />
+            </Stack>
+          </Stack>
+
+          <Stack direction='row' alignItems='flex-end'>
+            <Stack direction='row' flex='1' spacing={3}>
+              <Controller
+                control={control}
+                name='language'
+                render={({ field: { value, onChange } }) => (
+                  <LanguageSelection
+                    value={value}
+                    handleValueChange={(l) => onChange(l)}
+                    containerProps={{ sx: { flex: '0 0 30rem' } }}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name='topics'
+                render={({ field: { onChange } }) => (
+                  <TopicFilter
+                    handleValueChange={(v) => onChange(v)}
+                    containerProps={{ sx: { flex: '0 0 30rem' } }}
+                  />
+                )}
+              />
+            </Stack>
+
+            <Box mr={2} mb={2}>
+              {/* TODO: only enable button when form values have actually changed, not just simple dirty check. will require deep compare */}
+              <Button
+                variant='contained'
+                disabled={!isValid || !isDirty}
+                onClick={handleSubmit(handleApplyClick)}
+              >
+                Apply
+              </Button>
+            </Box>
+          </Stack>
+        </Paper>
+      </Collapse>
+
       <Stack
         direction='row'
         alignItems='flex-end'
         justifyContent={dates.length ? 'space-between' : 'flex-end'}
+        mt={showFilters ? 3 : 0}
       >
         {dates.length > 0 && <RepoGroupDateHeader dateStartEnd={dates[0]} />}
 
-        <Paper component={Stack} direction='row' spacing={2} px={3} py={2}>
-          <Controller
-            control={control}
-            name='searchText'
-            render={({ field, fieldState }) => (
-              <Input
-                {...field}
-                label='Search text'
-                error={!!fieldState.error}
-                helperText={fieldState.error?.message}
-                size='small'
-                sx={{ flex: '0 1 15rem' }}
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name='dateRange'
-            render={({ field: { value, onChange } }) => (
-              <TimeFilter
-                value={value}
-                handleChange={(v) => onChange(v)}
-                containerProps={{ sx: { flex: '0 0 8rem' }, size: 'small' }}
-              />
-            )}
-          />
-        </Paper>
+        <Button
+          variant='outlined'
+          endIcon={
+            <Icon
+              icon={
+                showFilters ? 'material-symbols:arrow-drop-up' : 'material-symbols:arrow-drop-down'
+              }
+            />
+          }
+          onClick={() => setShowFilters((prev) => !prev)}
+        >
+          Show filters
+        </Button>
       </Stack>
-
-      <Stack direction='row' alignItems='center' spacing={2} display='none'>
-        <Controller
-          control={control}
-          name='language'
-          render={({ field: { value, onChange } }) => (
-            <LanguageSelection
-              value={value}
-              handleValueChange={(l) => onChange(l)}
-              containerProps={{ sx: { flex: '0 0 30rem' } }}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name='stars'
-          render={({ field, fieldState }) => (
-            // TODO: only allow numbers to be entered
-            <Input
-              label='Min stars'
-              {...field}
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              sx={{ flex: '1 1 0%' }}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name='topics'
-          render={({ field: { onChange } }) => (
-            <TopicFilter
-              handleValueChange={(v) => onChange(v)}
-              containerProps={{ sx: { flex: '0 0 22%' } }}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name='itemsPerPage'
-          render={({ field, fieldState }) => (
-            <Input
-              label='Items per page'
-              error={!!fieldState.error}
-              helperText={fieldState.error?.message}
-              sx={{ flex: '1 1 0%' }}
-              {...field}
-            />
-          )}
-        />
-      </Stack>
-
-      {/* TODO: only enable button when form values have actually changed, not just simple dirty check. will require deep compare */}
-      {/* <Button disabled={!isValid || !isDirty} onClick={handleSubmit(handleApplyClick)}>
-          Apply
-        </Button> */}
     </Stack>
   )
 }
