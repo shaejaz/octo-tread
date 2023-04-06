@@ -1,17 +1,12 @@
 import { Icon } from '@iconify/react'
-import {
-  Autocomplete as MuiAutocomplete,
-  AutocompleteProps,
-  TextFieldProps,
-  Stack,
-} from '@mui/material'
-import { Input } from '@octotread/components/Input'
+import { Autocomplete as MuiAutocomplete, AutocompleteProps, Stack } from '@mui/material'
+import { Input, InputProps } from '@octotread/components/Input'
 import { ReactNode } from 'react'
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 type Props<T> = PartialBy<AutocompleteProps<T, true, false, false>, 'renderInput'> & {
-  customInputProps?: TextFieldProps
+  customInputProps?: InputProps
   renderHeader?: ReactNode
 }
 

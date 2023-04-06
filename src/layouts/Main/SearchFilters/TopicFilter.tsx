@@ -113,6 +113,7 @@ export function TopicFilter(props: Props) {
         customInputProps={{
           placeholder: 'Select topics',
           label: 'Topics',
+          tooltipText: 'Topics that the owner has attached to the repository',
         }}
         renderHeader={
           <Stack direction='column' px={2} py={1}>

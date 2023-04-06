@@ -103,6 +103,8 @@ export function SearchFilters() {
                   label='Search text'
                   error={!!fieldState.error}
                   helperText={fieldState.error?.message}
+                  placeholder='javascript'
+                  tooltipText='Keywords to search in the repositories name, description and readme file.'
                   sx={{ flex: '0 1 20rem' }}
                 />
               )}
