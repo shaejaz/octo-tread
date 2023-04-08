@@ -1,13 +1,14 @@
 import {
   Avatar,
   Box,
-  Card,
-  CardContent,
-  CardProps,
   Chip,
+  Paper,
+  PaperProps,
   Stack,
   Tooltip,
   Typography,
+  styled,
+  useTheme,
 } from '@mui/material'
 import { LanguageChip } from '@octotread/components/LanguageChip'
 import { StarGazersChip } from '@octotread/components/StarGazersChip'
@@ -15,12 +16,36 @@ import { TruncatedText } from '@octotread/components/TruncatedText'
 import { Repository } from '@octotread/models/repository'
 import { useCallback, useState } from 'react'
 
-interface RepoCardProps extends CardProps {
+interface RepoCardProps extends PaperProps {
   repo: Repository
 }
 
+const RepoPaper = styled(Paper)(({ theme }) => ({
+  height: '16rem',
+  display: 'flex',
+  flexDirection: 'column',
+  position: 'relative',
+  paddingInline: theme.spacing(2),
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(3),
+  transformStyle: 'preserve-3d',
+  zIndex: 1,
+  '&::before, &::after': {
+    content: '""',
+    position: 'absolute',
+    inset: '-0.2rem',
+    zIndex: -1,
+    background: theme.palette.gradient.main,
+    borderRadius: 'inherit',
+    transform: 'translateZ(-1px)',
+  },
+  '&::after': {
+    filter: 'blur(0.15rem)',
+  },
+}))
+
 export function RepoCard(props: RepoCardProps) {
-  const { repo, ...cardProps } = props
+  const { repo, ...paperProps } = props
 
   // TODO: possibly convert conditional tooltip to a hook + component
   const [showHeaderTooltip, setShowHeaderTooltip] = useState(false)
@@ -39,58 +64,56 @@ export function RepoCard(props: RepoCardProps) {
   }, [])
 
   return (
-    <Card sx={{ height: '16rem' }} {...cardProps}>
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-        {/* TODO: change layout for smaller screens */}
-        <Stack direction='row' justifyContent='space-between' alignItems='center'>
-          <Stack direction='column' pr={2} minWidth={0} flex={'1'}>
-            <Tooltip
-              title={repo.name}
-              placement='top'
-              disableHoverListener={!showHeaderTooltip}
-              disableTouchListener={!showHeaderTooltip}
-            >
-              <Typography variant='h6' noWrap ref={headerRef}>
-                {repo.name}
-              </Typography>
-            </Tooltip>
-            <Tooltip
-              title={repo.owner.login}
-              placement='bottom'
-              disableHoverListener={!showSubHeaderTooltip}
-              disableTouchListener={!showSubHeaderTooltip}
-            >
-              <Typography variant='subtitle2' noWrap ref={subHeaderRef}>
-                {repo.owner.login}
-              </Typography>
-            </Tooltip>
-          </Stack>
-
-          <Avatar sx={{ width: 40, height: 40 }} src={repo.owner.avatarUrl} />
+    <RepoPaper {...paperProps}>
+      {/* TODO: change layout for smaller screens */}
+      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+        <Stack direction='column' pr={2} minWidth={0} flex={'1'}>
+          <Tooltip
+            title={repo.name}
+            placement='top'
+            disableHoverListener={!showHeaderTooltip}
+            disableTouchListener={!showHeaderTooltip}
+          >
+            <Typography variant='h6' noWrap ref={headerRef}>
+              {repo.name}
+            </Typography>
+          </Tooltip>
+          <Tooltip
+            title={repo.owner.login}
+            placement='bottom'
+            disableHoverListener={!showSubHeaderTooltip}
+            disableTouchListener={!showSubHeaderTooltip}
+          >
+            <Typography variant='subtitle2' noWrap ref={subHeaderRef}>
+              {repo.owner.login}
+            </Typography>
+          </Tooltip>
         </Stack>
 
-        <Box py={2} sx={{ flex: '1 1 100%' }}>
-          <TruncatedText lines={4}>{repo.description}</TruncatedText>
-        </Box>
+        <Avatar sx={{ width: 40, height: 40 }} src={repo.owner.avatarUrl} />
+      </Stack>
 
-        <Stack direction='row' justifyContent='space-between' alignItems='center'>
-          <StarGazersChip stars={repo.stargazerCount} />
+      <Box py={2} sx={{ flex: '1 1 100%' }}>
+        <TruncatedText lines={4}>{repo.description}</TruncatedText>
+      </Box>
 
-          {/* TODO: add color borders and expansion */}
-          <Stack direction='row' spacing={1}>
-            {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 0 && (
-              <LanguageChip
-                name={repo.languages?.nodes[0]?.name || ''}
-                languageColor={repo.languages?.nodes[0]?.color || ''}
-              />
-            )}
+      <Stack direction='row' justifyContent='space-between' alignItems='center'>
+        <StarGazersChip stars={repo.stargazerCount} />
 
-            {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 1 && (
-              <Chip label='...' size='small' sx={{ px: 0.5 }} />
-            )}
-          </Stack>
+        {/* TODO: add color borders and expansion */}
+        <Stack direction='row' spacing={1}>
+          {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 0 && (
+            <LanguageChip
+              name={repo.languages?.nodes[0]?.name || ''}
+              languageColor={repo.languages?.nodes[0]?.color || ''}
+            />
+          )}
+
+          {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 1 && (
+            <Chip label='...' size='small' sx={{ px: 0.5 }} />
+          )}
         </Stack>
-      </CardContent>
-    </Card>
+      </Stack>
+    </RepoPaper>
   )
 }

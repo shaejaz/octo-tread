@@ -28,7 +28,8 @@ import { setToken } from '@octotread/services/auth'
 import { RootState } from '@octotread/services/store'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.palette.background.default,
+  backgroundImage: 'none',
   paddingTop: theme.spacing(2),
   boxShadow: 'none',
   transition: 'none',

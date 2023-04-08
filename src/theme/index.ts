@@ -1,16 +1,27 @@
 import { components } from './components/index'
-import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
-import { palette } from './palette'
+import { PaletteColorOptions, experimental_extendTheme as extendTheme } from '@mui/material/styles'
+import { darkPalette, lightPalette } from './palette'
 import { typography } from './typography'
+
+// declare module '@mui/material/styles' {
+//   interface Theme {
+//     palette: {
+//       gradient: PaletteColorOptions
+//     }
+//   }
+//   interface PaletteOptions {
+//     gradient?: PaletteColorOptions
+//   }
+// }
 
 export const theme = extendTheme({
   cssVarPrefix: 'octt',
   colorSchemes: {
     light: {
-      palette: palette,
+      palette: lightPalette,
     },
     dark: {
-      palette: palette,
+      palette: darkPalette,
     },
   },
   typography: typography,
