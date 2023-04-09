@@ -15,7 +15,9 @@ import {
   Stack,
   TextField,
   Typography,
+  containerClasses,
   styled,
+  typographyClasses,
 } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { useIsDefaultTokenSet } from 'hooks/useIsDefaultToken'
@@ -26,16 +28,21 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken } from '@octotread/services/auth'
 import { RootState } from '@octotread/services/store'
+import type {} from '@mui/material/themeCssVarsAugmentation'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
-  backgroundColor: theme.palette.background.default,
+  backgroundColor: theme.vars.palette.background.default,
   backgroundImage: 'none',
   paddingTop: theme.spacing(2),
   boxShadow: 'none',
   transition: 'none',
-  '& .MuiContainer-root': {
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: theme.shape.borderRadius,
+  [`& .${containerClasses.root}`]: {
+    backgroundColor: theme.vars.palette.primary.main,
+    backgroundImage: theme.vars.overlays[1],
+    borderRadius: theme.vars.shape.borderRadius,
+    [`& .${typographyClasses.root}`]: {
+      color: theme.vars.palette.primary.contrastText,
+    },
   },
 }))
 

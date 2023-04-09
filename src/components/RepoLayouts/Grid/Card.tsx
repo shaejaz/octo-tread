@@ -8,7 +8,6 @@ import {
   Tooltip,
   Typography,
   styled,
-  useTheme,
 } from '@mui/material'
 import { LanguageChip } from '@octotread/components/LanguageChip'
 import { StarGazersChip } from '@octotread/components/StarGazersChip'
@@ -28,20 +27,6 @@ const RepoPaper = styled(Paper)(({ theme }) => ({
   paddingInline: theme.spacing(2),
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(3),
-  transformStyle: 'preserve-3d',
-  zIndex: 1,
-  '&::before, &::after': {
-    content: '""',
-    position: 'absolute',
-    inset: '-0.2rem',
-    zIndex: -1,
-    background: theme.palette.gradient.main,
-    borderRadius: 'inherit',
-    transform: 'translateZ(-1px)',
-  },
-  '&::after': {
-    filter: 'blur(0.15rem)',
-  },
 }))
 
 export function RepoCard(props: RepoCardProps) {

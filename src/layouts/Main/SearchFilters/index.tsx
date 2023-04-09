@@ -1,4 +1,4 @@
-import { Box, Button, Collapse, Paper, Stack } from '@mui/material'
+import { Box, Button, Collapse, Paper, Stack, collapseClasses, styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResetQueryState, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
@@ -15,6 +15,40 @@ import { generateDateStartEnd } from '@octotread/utils/dates'
 import { Input } from '@octotread/components/Input'
 import { Icon } from '@iconify/react'
 import { RepoGroupDateHeader } from '@octotread/components/RepoGroupDateHeader'
+
+const FiltersPaper = styled(Paper)(({ theme }) => ({
+  backgroundImage: 'none',
+  paddingTop: theme.spacing(2),
+  paddingBottom: theme.spacing(3),
+  paddingInline: theme.spacing(2),
+  boxShadow: 'none',
+  transition: 'none',
+  color: theme.vars.palette.text.primary,
+  transformStyle: 'preserve-3d',
+  width: 'calc(100% - 0.4rem)',
+  position: 'relative',
+  zIndex: 1,
+  marginBlock: '0.2rem',
+  '&::before, &::after': {
+    content: '""',
+    position: 'absolute',
+    inset: '-0.2rem',
+    zIndex: -1,
+    background: theme.vars.palette.gradient.main,
+    borderRadius: 'inherit',
+    transform: 'translateZ(-1px)',
+  },
+  '&::after': {
+    filter: 'blur(1px)',
+  },
+}))
+
+const CustomCollapse = styled(Collapse)(() => ({
+  [`& .${collapseClasses.wrapperInner}`]: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}))
 
 const schema: ObjectSchema<ResetQueryState> = object({
   searchText: string().optional(),
@@ -91,8 +125,8 @@ export function SearchFilters() {
 
   return (
     <Stack direction='column'>
-      <Collapse in={showFilters}>
-        <Paper component={Stack} direction='column' spacing={3} sx={{ px: 2, pt: 2, pb: 3 }}>
+      <CustomCollapse in={showFilters}>
+        <FiltersPaper component={Stack} direction='column' spacing={3}>
           <Stack direction='row' justifyContent='space-between' spacing={3}>
             <Controller
               control={control}
@@ -191,8 +225,8 @@ export function SearchFilters() {
               </Button>
             </Box>
           </Stack>
-        </Paper>
-      </Collapse>
+        </FiltersPaper>
+      </CustomCollapse>
 
       <Stack
         direction='row'
