@@ -8,9 +8,6 @@ const palette: PaletteOptions = {
   secondary: {
     main: '#125271',
   },
-  gradient: {
-    main: 'linear-gradient(90deg, #3c0c75 10%, #125271 100%);',
-  },
 }
 
 export const lightPalette: PaletteOptions = {

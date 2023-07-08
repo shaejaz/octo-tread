@@ -7,16 +7,32 @@ import {
   TextFieldProps,
   Tooltip,
   Typography,
+  formLabelClasses,
+  inputBaseClasses,
+  outlinedInputClasses,
   styled,
+  typographyClasses,
   useTheme,
 } from '@mui/material'
 
 const StyledInput = styled(TextField)(({ theme }) => ({
-  '& .MuiFormLabel-root': {
+  [`& .${formLabelClasses.root} `]: {
     marginLeft: theme.spacing(1),
     marginBottom: theme.spacing(0.5),
     position: 'relative',
     transform: 'scale(1)',
+  },
+  [`& .${inputBaseClasses.focused}`]: {
+    [`& .${typographyClasses.root}`]: {
+      color: theme.vars.palette.primary.main,
+    },
+  },
+  [`& .${outlinedInputClasses.notchedOutline}`]: {
+    borderWidth: '2px',
+  },
+  [`& .${outlinedInputClasses.input}`]: {
+    background: theme.vars.palette.background.paper,
+    borderRadius: theme.vars.shape.borderRadius,
   },
   '& legend': {
     maxWidth: '0',
@@ -42,7 +58,6 @@ export const Input = (props: InputProps) => {
         shrink: true,
       }}
       InputProps={{
-        ...props.InputProps,
         endAdornment: error && (
           <InputAdornment position='end'>
             {/* TODO: adjust tooltip styles */}
@@ -56,6 +71,7 @@ export const Input = (props: InputProps) => {
             </Tooltip>
           </InputAdornment>
         ),
+        ...props.InputProps,
       }}
       label={
         <Stack direction='row' alignItems='center' spacing={1}>

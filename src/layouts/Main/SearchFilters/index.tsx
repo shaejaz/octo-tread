@@ -1,4 +1,13 @@
-import { Box, Button, Collapse, Paper, Stack, collapseClasses, styled } from '@mui/material'
+import {
+  Box,
+  Button,
+  Collapse,
+  Paper,
+  Stack,
+  StackProps,
+  collapseClasses,
+  styled,
+} from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResetQueryState, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
@@ -14,33 +23,23 @@ import { DateRange } from '@octotread/models/dateRange'
 import { generateDateStartEnd } from '@octotread/utils/dates'
 import { Input } from '@octotread/components/Input'
 import { Icon } from '@iconify/react'
-import { RepoGroupDateHeader } from '@octotread/components/RepoGroupDateHeader'
 
 const FiltersPaper = styled(Paper)(({ theme }) => ({
-  backgroundImage: 'none',
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(3),
   paddingInline: theme.spacing(2),
-  boxShadow: 'none',
-  transition: 'none',
   color: theme.vars.palette.text.primary,
-  transformStyle: 'preserve-3d',
-  width: 'calc(100% - 0.4rem)',
-  position: 'relative',
-  zIndex: 1,
-  marginBlock: '0.2rem',
-  '&::before, &::after': {
-    content: '""',
-    position: 'absolute',
-    inset: '-0.2rem',
-    zIndex: -1,
-    background: theme.vars.palette.gradient.main,
-    borderRadius: 'inherit',
-    transform: 'translateZ(-1px)',
-  },
-  '&::after': {
-    filter: 'blur(1px)',
-  },
+  width: '100%',
+  border: `4px solid ${theme.palette.primary.main}`,
+}))
+
+const FiltersButton = styled(Button)(({ theme }) => ({
+  position: 'absolute',
+  bottom: '0',
+  transform: 'translate(50%, 100%)',
+  right: '50%',
+  borderRadius: `0 0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
+  boxShadow: 'none',
 }))
 
 const CustomCollapse = styled(Collapse)(() => ({
@@ -48,6 +47,15 @@ const CustomCollapse = styled(Collapse)(() => ({
     display: 'flex',
     justifyContent: 'center',
   },
+}))
+
+const DummyCollapse = styled(Collapse)(({ theme }) => ({
+  position: 'absolute',
+  top: '-0.5rem',
+  width: '100%',
+  zIndex: -1,
+  backgroundColor: theme.palette.primary.main,
+  borderRadius: `0 0 ${theme.spacing(1)} ${theme.spacing(1)}`,
 }))
 
 const schema: ObjectSchema<ResetQueryState> = object({
@@ -63,7 +71,9 @@ const schema: ObjectSchema<ResetQueryState> = object({
     .max(30),
 })
 
-export function SearchFilters() {
+type Props = StackProps
+
+export function SearchFilters(props: Props) {
   const [showFilters, setShowFilters] = useState(false)
 
   const dispatch = useDispatch()
@@ -74,8 +84,6 @@ export function SearchFilters() {
   const searchDateRange = useSelector((state: RootState) => state.searchquery.dateRange)
   const searchTopics = useSelector((state: RootState) => state.searchquery.topics)
   const repoItemsPerPage = useSelector((state: RootState) => state.searchquery.itemsPerPage)
-
-  const dates = useSelector((state: RootState) => state.searchquery.datesToFetch)
 
   const {
     control,
@@ -124,7 +132,7 @@ export function SearchFilters() {
   }
 
   return (
-    <Stack direction='column'>
+    <Stack direction='column' sx={{ position: 'relative' }} {...props}>
       <CustomCollapse in={showFilters}>
         <FiltersPaper component={Stack} direction='column' spacing={3}>
           <Stack direction='row' justifyContent='space-between' spacing={3}>
@@ -227,29 +235,21 @@ export function SearchFilters() {
           </Stack>
         </FiltersPaper>
       </CustomCollapse>
+      <DummyCollapse in={showFilters} collapsedSize='calc(100% + 0.5rem)' />
 
-      <Stack
-        direction='row'
-        alignItems='flex-end'
-        justifyContent={dates.length ? 'space-between' : 'flex-end'}
-        mt={showFilters ? 3 : 0}
+      <FiltersButton
+        variant='contained'
+        endIcon={
+          <Icon
+            icon={
+              showFilters ? 'material-symbols:arrow-drop-up' : 'material-symbols:arrow-drop-down'
+            }
+          />
+        }
+        onClick={() => setShowFilters((prev) => !prev)}
       >
-        {dates.length > 0 && <RepoGroupDateHeader dateStartEnd={dates[0]} />}
-
-        <Button
-          variant='outlined'
-          endIcon={
-            <Icon
-              icon={
-                showFilters ? 'material-symbols:arrow-drop-up' : 'material-symbols:arrow-drop-down'
-              }
-            />
-          }
-          onClick={() => setShowFilters((prev) => !prev)}
-        >
-          Show filters
-        </Button>
-      </Stack>
+        Show filters
+      </FiltersButton>
     </Stack>
   )
 }

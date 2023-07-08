@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setToken } from '@octotread/services/auth'
 import { RootState } from '@octotread/services/store'
 import type {} from '@mui/material/themeCssVarsAugmentation'
+import { SearchFilters } from './SearchFilters'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.default,
@@ -176,6 +177,8 @@ export function Toolbar() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <SearchFilters maxWidth='lg' width='100%' marginX='auto' />
     </OctotreadAppBar>
   )
 }

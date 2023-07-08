@@ -23,7 +23,7 @@ export function RepoLayouts() {
     <>
       {repos.data.map((i, idx) => (
         // TODO: fix all key props
-        <RepoGroup key={idx} repoGroup={i} showDateHeader={idx !== 0} />
+        <RepoGroup key={idx} repoGroup={i} />
       ))}
 
       {repos.state === 'loading' && <Typography variant='h3'>Loading!</Typography>}
