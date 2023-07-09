@@ -40,6 +40,7 @@ const FiltersButton = styled(Button)(({ theme }) => ({
   right: '50%',
   borderRadius: `0 0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
   boxShadow: 'none',
+  backgroundColor: theme.vars.palette.primary.main,
 }))
 
 const CustomCollapse = styled(Collapse)(() => ({

@@ -30,6 +30,7 @@ import { setToken } from '@octotread/services/auth'
 import { RootState } from '@octotread/services/store'
 import type {} from '@mui/material/themeCssVarsAugmentation'
 import { SearchFilters } from './SearchFilters'
+import { ThemeSwitcher } from '@octotread/components/ThemeSwitcher'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.default,
@@ -39,7 +40,7 @@ const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   transition: 'none',
   [`& .${containerClasses.root}`]: {
     backgroundColor: theme.vars.palette.primary.main,
-    backgroundImage: theme.vars.overlays[1],
+    // backgroundImage: theme.vars.overlays[1],
     borderRadius: theme.vars.shape.borderRadius,
     [`& .${typographyClasses.root}`]: {
       color: theme.vars.palette.primary.contrastText,
@@ -108,33 +109,37 @@ export function Toolbar() {
         <MuiToolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Typography variant='h5'>Octotread</Typography>
 
-          <IconButton size='small' onClick={handleAvatarButtonClick}>
-            {isDefault ? (
-              <Badge
-                overlap='circular'
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                badgeContent={
-                  <Stack
-                    alignItems='center'
-                    justifyContent='center'
-                    borderRadius='100%'
-                    sx={{ bgcolor: '#e3102c', m: 'auto' }}
-                  >
-                    <Icon
-                      icon='material-symbols:error-circle-rounded-outline'
-                      color='#fff'
-                      width='12'
-                      height='12'
-                    />
-                  </Stack>
-                }
-              >
-                {avatarComponent()}
-              </Badge>
-            ) : (
-              avatarComponent()
-            )}
-          </IconButton>
+          <Stack direction='row' alignItems='center' spacing={2}>
+            <ThemeSwitcher />
+
+            <IconButton size='small' onClick={handleAvatarButtonClick}>
+              {isDefault ? (
+                <Badge
+                  overlap='circular'
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  badgeContent={
+                    <Stack
+                      alignItems='center'
+                      justifyContent='center'
+                      borderRadius='100%'
+                      sx={{ bgcolor: '#e3102c', m: 'auto' }}
+                    >
+                      <Icon
+                        icon='material-symbols:error-circle-rounded-outline'
+                        color='#fff'
+                        width='12'
+                        height='12'
+                      />
+                    </Stack>
+                  }
+                >
+                  {avatarComponent()}
+                </Badge>
+              ) : (
+                avatarComponent()
+              )}
+            </IconButton>
+          </Stack>
         </MuiToolbar>
       </Container>
 
