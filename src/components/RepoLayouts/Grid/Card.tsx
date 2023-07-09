@@ -1,13 +1,17 @@
+import { Icon } from '@iconify/react'
 import {
   Avatar,
   Box,
   Chip,
+  Fade,
+  Link,
   Paper,
   PaperProps,
   Stack,
   Tooltip,
   Typography,
   styled,
+  useTheme,
 } from '@mui/material'
 import { LanguageChip } from '@octotread/components/LanguageChip'
 import { StarGazersChip } from '@octotread/components/StarGazersChip'
@@ -27,6 +31,11 @@ const RepoPaper = styled(Paper)(({ theme }) => ({
   paddingInline: theme.spacing(2),
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(3),
+  transition: 'all 0.2s ease-in-out',
+  '&:hover': {
+    transform: 'scale(1.02)',
+    boxShadow: theme.shadows[4],
+  },
 }))
 
 export function RepoCard(props: RepoCardProps) {
@@ -35,6 +44,9 @@ export function RepoCard(props: RepoCardProps) {
   // TODO: possibly convert conditional tooltip to a hook + component
   const [showHeaderTooltip, setShowHeaderTooltip] = useState(false)
   const [showSubHeaderTooltip, setShowSubHeaderTooltip] = useState(false)
+  const [showOpenIcon, setShowOpenIcon] = useState(false)
+
+  const theme = useTheme()
 
   const headerRef = useCallback((node: HTMLElement) => {
     if (node !== null) {
@@ -59,9 +71,30 @@ export function RepoCard(props: RepoCardProps) {
             disableHoverListener={!showHeaderTooltip}
             disableTouchListener={!showHeaderTooltip}
           >
-            <Typography variant='h6' noWrap ref={headerRef}>
-              {repo.name}
-            </Typography>
+            <Stack
+              direction='row'
+              alignItems='baseline'
+              spacing={1}
+              sx={{ ':hover': { cursor: 'pointer' } }}
+            >
+              <Typography
+                variant='h6'
+                noWrap
+                ref={headerRef}
+                onMouseEnter={() => setShowOpenIcon(true)}
+                onMouseLeave={() => setShowOpenIcon(false)}
+              >
+                <Link href={repo.url} target='_blank' rel='noreferrer' underline='none'>
+                  {repo.name}
+                </Link>
+              </Typography>
+
+              <Box sx={{ flex: '0 0 auto' }}>
+                <Fade in={showOpenIcon}>
+                  <Icon icon='majesticons:open' color={theme.palette.primary.main} />
+                </Fade>
+              </Box>
+            </Stack>
           </Tooltip>
           <Tooltip
             title={repo.owner.login}

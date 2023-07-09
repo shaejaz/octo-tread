@@ -49,9 +49,11 @@ const ThemeSwitch = styled(Switch)(({ theme }) => ({
 export const ThemeSwitcher = () => {
   const { mode, setMode } = useColorScheme()
 
+  const isDark = mode === 'dark'
+
   const handleChange = () => {
-    setMode(mode === 'light' ? 'dark' : 'light')
+    setMode(!isDark ? 'dark' : 'light')
   }
 
-  return <ThemeSwitch onChange={handleChange} />
+  return <ThemeSwitch checked={!isDark} onChange={handleChange} />
 }
