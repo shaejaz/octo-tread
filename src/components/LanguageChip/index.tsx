@@ -8,5 +8,12 @@ type LanguageChipProps = ChipProps & {
 export const LanguageChip = (props: LanguageChipProps) => {
   const { name, languageColor, ...rest } = props
 
-  return <Chip size='small' {...rest} label={name} />
+  return (
+    <Chip
+      {...rest}
+      label={name}
+      size='small'
+      sx={{ border: languageColor ? `2px solid ${languageColor}` : 'none' }}
+    />
+  )
 }

@@ -128,7 +128,22 @@ export function RepoCard(props: RepoCardProps) {
           )}
 
           {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 1 && (
-            <Chip label='...' size='small' sx={{ px: 0.5 }} />
+            <Tooltip
+              placement='top'
+              title={
+                <Stack direction='column' spacing={1}>
+                  {repo.languages?.nodes.slice(1).map((node) => (
+                    <LanguageChip
+                      key={node?.name}
+                      name={node?.name || ''}
+                      languageColor={node?.color || ''}
+                    />
+                  ))}
+                </Stack>
+              }
+            >
+              <Chip label='...' size='small' sx={{ px: 0.5 }} />
+            </Tooltip>
           )}
         </Stack>
       </Stack>
