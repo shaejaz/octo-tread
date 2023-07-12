@@ -52,17 +52,16 @@ export function RepoGroup(props: Props) {
         <RepoGroupDateHeader dateStartEnd={props.repoGroup.dateStartEnd} />
       )}
 
-      {page !== 1 && result.isFetching && <Typography variant='h5'>Loading!</Typography>}
-
       {page !== 1 && result.isError && <Typography variant='h5'>Error!</Typography>}
 
-      {(page === 1 || !(result.isError || result.isFetching)) && (
+      {(page === 1 || !result.isError) && (
         <GridLayout
           repos={
             page !== 1 && result.data
               ? (result.data as unknown as SearchRepositoryResult).repositories
               : props.repoGroup.repos
           }
+          loading={result.isFetching}
         />
       )}
       <Pagination currentPage={page} numPages={numPages} handlePageChange={handleChange} />

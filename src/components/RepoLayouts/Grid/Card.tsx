@@ -7,6 +7,7 @@ import {
   Link,
   Paper,
   PaperProps,
+  Skeleton,
   Stack,
   Tooltip,
   Typography,
@@ -21,6 +22,7 @@ import { useCallback, useState } from 'react'
 
 interface RepoCardProps extends PaperProps {
   repo: Repository
+  loading: boolean
 }
 
 const RepoPaper = styled(Paper)(({ theme }) => ({
@@ -39,7 +41,7 @@ const RepoPaper = styled(Paper)(({ theme }) => ({
 }))
 
 export function RepoCard(props: RepoCardProps) {
-  const { repo, ...paperProps } = props
+  const { repo, loading, ...paperProps } = props
 
   // TODO: possibly convert conditional tooltip to a hook + component
   const [showHeaderTooltip, setShowHeaderTooltip] = useState(false)
@@ -65,88 +67,123 @@ export function RepoCard(props: RepoCardProps) {
       {/* TODO: change layout for smaller screens */}
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <Stack direction='column' pr={2} minWidth={0} flex={'1'}>
-          <Tooltip
-            title={repo.name}
-            placement='top'
-            disableHoverListener={!showHeaderTooltip}
-            disableTouchListener={!showHeaderTooltip}
-          >
-            <Stack
-              direction='row'
-              alignItems='baseline'
-              spacing={1}
-              sx={{ ':hover': { cursor: 'pointer' } }}
-            >
-              <Typography
-                variant='h6'
-                noWrap
-                ref={headerRef}
-                onMouseEnter={() => setShowOpenIcon(true)}
-                onMouseLeave={() => setShowOpenIcon(false)}
+          {loading ? (
+            <>
+              <Skeleton variant='rounded' width='100%' sx={{ mb: 1 }}>
+                <Typography variant='body1' noWrap>
+                  .
+                </Typography>
+              </Skeleton>
+              <Skeleton variant='rounded' width='80%'>
+                <Typography variant='subtitle2' noWrap>
+                  .
+                </Typography>
+              </Skeleton>
+            </>
+          ) : (
+            <>
+              <Tooltip
+                title={repo.name}
+                placement='top'
+                disableHoverListener={!showHeaderTooltip}
+                disableTouchListener={!showHeaderTooltip}
               >
-                <Link href={repo.url} target='_blank' rel='noreferrer' underline='none'>
-                  {repo.name}
-                </Link>
-              </Typography>
+                <Stack
+                  direction='row'
+                  alignItems='baseline'
+                  spacing={1}
+                  sx={{ ':hover': { cursor: 'pointer' } }}
+                >
+                  <Typography
+                    variant='h6'
+                    noWrap
+                    ref={headerRef}
+                    onMouseEnter={() => setShowOpenIcon(true)}
+                    onMouseLeave={() => setShowOpenIcon(false)}
+                  >
+                    <Link href={repo.url} target='_blank' rel='noreferrer' underline='none'>
+                      {repo.name}
+                    </Link>
+                  </Typography>
 
-              <Box sx={{ flex: '0 0 auto' }}>
-                <Fade in={showOpenIcon}>
-                  <Icon icon='majesticons:open' color={theme.palette.primary.main} />
-                </Fade>
-              </Box>
-            </Stack>
-          </Tooltip>
-          <Tooltip
-            title={repo.owner.login}
-            placement='bottom'
-            disableHoverListener={!showSubHeaderTooltip}
-            disableTouchListener={!showSubHeaderTooltip}
-          >
-            <Typography variant='subtitle2' noWrap ref={subHeaderRef}>
-              {repo.owner.login}
-            </Typography>
-          </Tooltip>
+                  <Box sx={{ flex: '0 0 auto' }}>
+                    <Fade in={showOpenIcon}>
+                      <Icon icon='majesticons:open' color={theme.palette.primary.main} />
+                    </Fade>
+                  </Box>
+                </Stack>
+              </Tooltip>
+              <Tooltip
+                title={repo.owner.login}
+                placement='bottom'
+                disableHoverListener={!showSubHeaderTooltip}
+                disableTouchListener={!showSubHeaderTooltip}
+              >
+                <Typography variant='subtitle2' noWrap ref={subHeaderRef}>
+                  {repo.owner.login}
+                </Typography>
+              </Tooltip>
+            </>
+          )}
         </Stack>
 
-        <Avatar sx={{ width: 40, height: 40 }} src={repo.owner.avatarUrl} />
+        {loading ? (
+          <Skeleton variant='circular'>
+            <Avatar sx={{ width: 40, height: 40 }} />
+          </Skeleton>
+        ) : (
+          <Avatar sx={{ width: 40, height: 40 }} src={repo.owner.avatarUrl} />
+        )}
       </Stack>
 
       <Box py={2} sx={{ flex: '1 1 100%' }}>
-        <TruncatedText lines={4}>{repo.description}</TruncatedText>
+        {loading ? (
+          <Skeleton variant='rounded' height='100%' />
+        ) : (
+          <TruncatedText lines={4}>{repo.description}</TruncatedText>
+        )}
       </Box>
 
-      <Stack direction='row' justifyContent='space-between' alignItems='center'>
-        <StarGazersChip stars={repo.stargazerCount} />
+      {loading ? (
+        <Skeleton variant='rounded' width='100%'>
+          <Typography variant='h5' noWrap>
+            .
+          </Typography>
+        </Skeleton>
+      ) : (
+        <Stack direction='row' justifyContent='space-between' alignItems='center'>
+          <StarGazersChip stars={repo.stargazerCount} />
 
-        {/* TODO: add color borders and expansion */}
-        <Stack direction='row' spacing={1}>
-          {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 0 && (
-            <LanguageChip
-              name={repo.languages?.nodes[0]?.name || ''}
-              languageColor={repo.languages?.nodes[0]?.color || ''}
-            />
-          )}
+          {/* TODO: add color borders and expansion */}
+          <Stack direction='row' spacing={1}>
+            {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 0 && (
+              <LanguageChip
+                name={repo.languages?.nodes[0]?.name || ''}
+                languageColor={repo.languages?.nodes[0]?.color || ''}
+              />
+            )}
 
-          {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 1 && (
-            <Tooltip
-              placement='top'
-              title={
-                <Stack direction='column' spacing={1}>
-                  {repo.languages?.nodes.slice(1).map((node) => (
-                    <LanguageChip
-                      key={node?.name}
-                      name={node?.name || ''}
-                      languageColor={node?.color || ''}
-                    />
-                  ))}
-                </Stack>
-              }
-            >
-              <Chip label='...' size='small' sx={{ px: 0.5 }} />
-            </Tooltip>
-          )}
+            {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 1 && (
+              <Tooltip
+                placement='top'
+                title={
+                  <Stack direction='column' spacing={1}>
+                    {repo.languages?.nodes.slice(1).map((node) => (
+                      <LanguageChip
+                        key={node?.name}
+                        name={node?.name || ''}
+                        languageColor={node?.color || ''}
+                      />
+                    ))}
+                  </Stack>
+                }
+              >
+                <Chip label='...' size='small' sx={{ px: 0.5 }} />
+              </Tooltip>
+            )}
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </RepoPaper>
   )
 }
