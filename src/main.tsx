@@ -9,11 +9,11 @@ import { theme } from '@octotread/theme/index'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <CssBaseline enableColorScheme />
-    <Provider store={store}>
-      <CssVarsProvider theme={theme}>
+    <CssVarsProvider theme={theme}>
+      <CssBaseline enableColorScheme />
+      <Provider store={store}>
         <RouterProvider router={router} />
-      </CssVarsProvider>
-    </Provider>
+      </Provider>
+    </CssVarsProvider>
   </React.StrictMode>,
 )

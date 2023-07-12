@@ -34,16 +34,38 @@ const FiltersPaper = styled(Paper)(({ theme }) => ({
 }))
 
 const FiltersButton = styled(Button)(({ theme }) => ({
+  borderRadius: `0 0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
+  boxShadow: 'none',
+  backgroundColor: theme.vars.palette.primary.main,
+
+  '&::before, &::after': {
+    content: '""',
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    top: '0',
+    width: theme.shape.borderRadius,
+    height: '50px',
+    boxShadow: `0 -${theme.shape.borderRadius}px 0 0 ${theme.palette.primary.main}`,
+  },
+  '&::before': {
+    left: `-${theme.shape.borderRadius}px`,
+    borderTopRightRadius: theme.shape.borderRadius,
+  },
+  '&::after': {
+    right: `-${theme.shape.borderRadius}px`,
+    borderTopLeftRadius: theme.shape.borderRadius,
+  },
+}))
+
+const FiltersButtonCollapse = styled(Collapse)(({ theme }) => ({
   position: 'absolute',
   bottom: '0',
   transform: 'translate(50%, 100%)',
   right: '50%',
-  borderRadius: `0 0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
-  boxShadow: 'none',
-  backgroundColor: theme.vars.palette.primary.main,
 }))
 
 const CustomCollapse = styled(Collapse)(() => ({
+  zIndex: 1,
   [`& .${collapseClasses.wrapperInner}`]: {
     display: 'flex',
     justifyContent: 'center',
@@ -76,6 +98,7 @@ type Props = StackProps
 
 export function SearchFilters(props: Props) {
   const [showFilters, setShowFilters] = useState(false)
+  const [filtersButtonIn, setFiltersButtonIn] = useState(true)
 
   const dispatch = useDispatch()
 
@@ -234,23 +257,27 @@ export function SearchFilters(props: Props) {
               </Button>
             </Box>
           </Stack>
+
+          <Button onClick={() => setFiltersButtonIn((val) => !val)}>Click me</Button>
         </FiltersPaper>
       </CustomCollapse>
       <DummyCollapse in={showFilters} collapsedSize='calc(100% + 0.5rem)' />
 
-      <FiltersButton
-        variant='contained'
-        endIcon={
-          <Icon
-            icon={
-              showFilters ? 'material-symbols:arrow-drop-up' : 'material-symbols:arrow-drop-down'
-            }
-          />
-        }
-        onClick={() => setShowFilters((prev) => !prev)}
-      >
-        Show filters
-      </FiltersButton>
+      <FiltersButtonCollapse in={filtersButtonIn}>
+        <FiltersButton
+          variant='contained'
+          endIcon={
+            <Icon
+              icon={
+                showFilters ? 'material-symbols:arrow-drop-up' : 'material-symbols:arrow-drop-down'
+              }
+            />
+          }
+          onClick={() => setShowFilters((prev) => !prev)}
+        >
+          Show filters
+        </FiltersButton>
+      </FiltersButtonCollapse>
     </Stack>
   )
 }
