@@ -257,8 +257,6 @@ export function SearchFilters(props: Props) {
               </Button>
             </Box>
           </Stack>
-
-          <Button onClick={() => setFiltersButtonIn((val) => !val)}>Click me</Button>
         </FiltersPaper>
       </CustomCollapse>
       <DummyCollapse in={showFilters} collapsedSize='calc(100% + 0.5rem)' />

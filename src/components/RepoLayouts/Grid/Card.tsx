@@ -167,7 +167,7 @@ export function RepoCard(props: RepoCardProps) {
               <Tooltip
                 placement='top'
                 title={
-                  <Stack direction='column' spacing={1}>
+                  <Stack direction='column' spacing={1} sx={{ my: 1 }}>
                     {repo.languages?.nodes.slice(1).map((node) => (
                       <LanguageChip
                         key={node?.name}
