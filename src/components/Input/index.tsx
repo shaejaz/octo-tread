@@ -60,7 +60,6 @@ export const Input = (props: InputProps) => {
       InputProps={{
         endAdornment: error && (
           <InputAdornment position='end'>
-            {/* TODO: adjust tooltip styles */}
             <Tooltip title={helperText}>
               <IconButton disableRipple edge='end'>
                 <Icon

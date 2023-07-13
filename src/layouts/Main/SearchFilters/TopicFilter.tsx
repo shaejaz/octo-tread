@@ -1,10 +1,14 @@
+import { Icon } from '@iconify/react'
 import {
   Box,
   BoxProps,
   Checkbox,
+  Divider,
   FormControlLabel,
   FormGroup,
   Stack,
+  Tooltip,
+  Typography,
   debounce,
 } from '@mui/material'
 import { Autocomplete } from '@octotread/components/Autocomplete'
@@ -14,6 +18,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 
 const defaultTopicQuery: TopicSearchQuery = {
   featured: true,
+  curated: true,
 }
 
 interface Props {
@@ -26,6 +31,8 @@ export function TopicFilter(props: Props) {
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<Topic[]>([])
   const [values, setValues] = useState<Topic[]>([])
+  const [featured, setFeatured] = useState(defaultTopicQuery.featured)
+  const [curated, setCurated] = useState(defaultTopicQuery.curated)
 
   const [trigger, result] = useLazySearchTopicQuery()
 
@@ -39,11 +46,8 @@ export function TopicFilter(props: Props) {
 
   const debouncedTrigger = useMemo(
     () =>
-      debounce((request: { input: string; callback: (v?: Topic[]) => void }) => {
-        const query: TopicSearchQuery = {
-          text: request.input,
-          featured: true,
-        }
+      debounce((request: { input: TopicSearchQuery; callback: (v?: Topic[]) => void }) => {
+        const query: TopicSearchQuery = request.input
 
         unwrappedTrigger(query, request.callback)
       }, 400),
@@ -63,13 +67,8 @@ export function TopicFilter(props: Props) {
   useEffect(() => {
     let active = true
 
-    if (searchValue === '') {
-      setOptions(values)
-      return undefined
-    }
-
     debouncedTrigger({
-      input: searchValue,
+      input: { text: searchValue, featured, curated },
       callback: (res) => {
         if (active) {
           let newOptions: Topic[] = []
@@ -86,7 +85,7 @@ export function TopicFilter(props: Props) {
     return () => {
       active = false
     }
-  }, [debouncedTrigger, values, searchValue])
+  }, [debouncedTrigger, values, searchValue, featured, curated])
 
   return (
     <Box {...props.containerProps}>
@@ -118,11 +117,47 @@ export function TopicFilter(props: Props) {
         renderHeader={
           <Stack direction='column' px={2} py={1}>
             <FormGroup>
-              <FormControlLabel control={<Checkbox />} label='Featured' />
+              <Stack direction='row' spacing={2}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={featured}
+                      onChange={(val) => setFeatured(val.target.checked)}
+                    />
+                  }
+                  label={
+                    <Stack direction='row' alignItems='center' spacing={0.5}>
+                      <Typography>Featured</Typography>
+
+                      <Tooltip title='Topics featured by GitHub' placement='right'>
+                        <Icon icon='material-symbols:info-outline' />
+                      </Tooltip>
+                    </Stack>
+                  }
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={curated}
+                      onChange={(val) => setCurated(val.target.checked)}
+                    />
+                  }
+                  label={
+                    <Stack direction='row' alignItems='center' spacing={0.5}>
+                      <Typography>Curated</Typography>
+
+                      <Tooltip title='Topics curated by GitHub' placement='right'>
+                        <Icon icon='material-symbols:info-outline' />
+                      </Tooltip>
+                    </Stack>
+                  }
+                />
+              </Stack>
             </FormGroup>
+
+            <Divider />
           </Stack>
         }
-        // TODO: Add additional filtering for featured/curated etc.
         // TODO: Add topic logos
       />
     </Box>
