@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { Autocomplete as MuiAutocomplete, AutocompleteProps, Stack } from '@mui/material'
+import { Autocomplete as MuiAutocomplete, AutocompleteProps, Stack, useTheme } from '@mui/material'
 import { Input, InputProps } from '@octotread/components/Input'
 import { ReactNode } from 'react'
 
@@ -13,6 +13,8 @@ type Props<T> = PartialBy<AutocompleteProps<T, true, false, false>, 'renderInput
 export function Autocomplete<T>(props: Props<T>) {
   const { customInputProps, renderHeader, options, loading, ...rest } = props
   let headerOptions = options
+
+  const theme = useTheme()
 
   if (renderHeader) {
     headerOptions = [{ header: true } as T, ...options]
@@ -30,6 +32,7 @@ export function Autocomplete<T>(props: Props<T>) {
             endAdornment: <>{params.InputProps.endAdornment}</>,
           }}
           InputLabelProps={{ ...params.InputLabelProps, shrink: true }}
+          sx={{ '& .MuiInputBase-root': { backgroundColor: theme.palette.background.paper } }}
         />
       )}
       renderOption={(optionProps, option, state) => {
