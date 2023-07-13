@@ -158,8 +158,8 @@ export function SearchFilters(props: Props) {
   return (
     <Stack direction='column' sx={{ position: 'relative' }} {...props}>
       <CustomCollapse in={showFilters}>
-        <FiltersPaper component={Stack} direction='column' spacing={3}>
-          <Stack direction='row' justifyContent='space-between' spacing={3}>
+        <FiltersPaper component={Stack} direction='column' alignItems='center' spacing={3}>
+          <Stack direction='row' spacing={3} width='100%'>
             <Controller
               control={control}
               name='searchText'
@@ -171,56 +171,54 @@ export function SearchFilters(props: Props) {
                   helperText={fieldState.error?.message}
                   placeholder='javascript'
                   tooltipText='Keywords to search in the repositories name, description and readme file.'
-                  sx={{ flex: '0 1 20rem' }}
+                  sx={{ flex: '1 1 100%' }}
                 />
               )}
             />
 
-            <Stack direction='row' justifyContent='flex-end' spacing={3} flex='0 1 auto'>
-              <Controller
-                control={control}
-                name='dateRange'
-                render={({ field: { value, onChange } }) => (
-                  <TimeFilter
-                    value={value}
-                    handleChange={(v) => onChange(v)}
-                    containerProps={{ sx: { flex: '0 0 8rem' } }}
-                  />
-                )}
-              />
+            <Controller
+              control={control}
+              name='dateRange'
+              render={({ field: { value, onChange } }) => (
+                <TimeFilter
+                  value={value}
+                  handleChange={(v) => onChange(v)}
+                  containerProps={{ sx: { flex: '0 0 12rem' } }}
+                />
+              )}
+            />
 
-              <Controller
-                control={control}
-                name='stars'
-                render={({ field, fieldState }) => (
-                  // TODO: only allow numbers to be entered
-                  <Input
-                    {...field}
-                    label='Min stars'
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                    sx={{ flex: '0 1 8rem' }}
-                  />
-                )}
-              />
+            <Controller
+              control={control}
+              name='stars'
+              render={({ field, fieldState }) => (
+                // TODO: only allow numbers to be entered
+                <Input
+                  {...field}
+                  label='Min stars'
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
+                  sx={{ flex: '0 0 10rem' }}
+                />
+              )}
+            />
 
-              <Controller
-                control={control}
-                name='itemsPerPage'
-                render={({ field, fieldState }) => (
-                  <Input
-                    {...field}
-                    label='Items per page'
-                    error={!!fieldState.error}
-                    helperText={fieldState.error?.message}
-                    sx={{ flex: '0 1 10rem' }}
-                  />
-                )}
-              />
-            </Stack>
+            <Controller
+              control={control}
+              name='itemsPerPage'
+              render={({ field, fieldState }) => (
+                <Input
+                  {...field}
+                  label='Items per page'
+                  error={!!fieldState.error}
+                  helperText={fieldState.error?.message}
+                  sx={{ flex: '0 0 10rem' }}
+                />
+              )}
+            />
           </Stack>
 
-          <Stack direction='row' alignItems='flex-end'>
+          <Stack direction='row' alignItems='flex-end' width='100%'>
             <Stack direction='row' flex='1' spacing={3}>
               <Controller
                 control={control}
@@ -229,7 +227,7 @@ export function SearchFilters(props: Props) {
                   <LanguageSelection
                     value={value}
                     handleValueChange={(l) => onChange(l)}
-                    containerProps={{ sx: { flex: '0 0 30rem' } }}
+                    containerProps={{ sx: { flex: '1 1 50%' } }}
                   />
                 )}
               />
@@ -240,23 +238,21 @@ export function SearchFilters(props: Props) {
                 render={({ field: { onChange } }) => (
                   <TopicFilter
                     handleValueChange={(v) => onChange(v)}
-                    containerProps={{ sx: { flex: '0 0 30rem' } }}
+                    containerProps={{ sx: { flex: '1 1 50%' } }}
                   />
                 )}
               />
             </Stack>
-
-            <Box mr={2} mb={2}>
-              {/* TODO: only enable button when form values have actually changed, not just simple dirty check. will require deep compare */}
-              <Button
-                variant='contained'
-                disabled={!isValid || !isDirty}
-                onClick={handleSubmit(handleApplyClick)}
-              >
-                Apply
-              </Button>
-            </Box>
           </Stack>
+
+          {/* TODO: only enable button when form values have actually changed, not just simple dirty check. will require deep compare */}
+          <Button
+            variant='contained'
+            disabled={!isValid || !isDirty}
+            onClick={handleSubmit(handleApplyClick)}
+          >
+            Apply
+          </Button>
         </FiltersPaper>
       </CustomCollapse>
       <DummyCollapse in={showFilters} collapsedSize='calc(100% + 0.5rem)' />
