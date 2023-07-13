@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { GridLayout } from './Grid'
 import { useSelector } from 'react-redux'
 import { RootState } from '@octotread/services/store'
-import { Box, Stack, Typography } from '@mui/material'
+import { Box, Stack, useTheme } from '@mui/material'
 import { SearchRepositoryResult, useLazySearchRepositoriesQuery } from '@octotread/services/api'
 import { RepositoryGroup } from '@octotread/models/repositoryGroup'
 import { getCursor } from '@octotread/utils/cursor'
 import { useGenerateQueryString } from 'hooks/useGenerateQueryString'
 import { RepoGroupDateHeader } from '../RepoGroupDateHeader'
 import { Pagination } from '@octotread/components/Pagination'
+import { Error } from '@octotread/components/Error'
 
 interface Props {
   repoGroup: RepositoryGroup
@@ -19,6 +20,8 @@ interface Props {
 export function RepoGroup(props: Props) {
   const [page, setPage] = useState(1)
   const [trigger, result] = useLazySearchRepositoriesQuery()
+
+  const theme = useTheme()
 
   const queryString = useGenerateQueryString(props.repoGroup.dateStartEnd)
   const itemsPerPage = useSelector((state: RootState) => state.searchquery.itemsPerPage)
@@ -48,30 +51,34 @@ export function RepoGroup(props: Props) {
 
   return (
     <Stack direction='column' alignItems='center' spacing={3} width='100%'>
-      <Stack direction='column' width='100%'>
-        {(props.showDateHeader || props.showDateHeader === undefined) && (
-          <Box sx={{ mb: 3 }}>
-            <RepoGroupDateHeader dateStartEnd={props.repoGroup.dateStartEnd} />
+      {(props.showDateHeader || props.showDateHeader === undefined) && (
+        <RepoGroupDateHeader dateStartEnd={props.repoGroup.dateStartEnd} />
+      )}
+
+      {page !== 1 && result.isError && <Error message='Error in fetching repositories' />}
+
+      {props.repoGroup.repos.length < 1 && !result.isError && (
+        <Error message='No repositories found' iconProps={{ color: theme.palette.info.main }} />
+      )}
+
+      {(page === 1 || !result.isError) && props.repoGroup.repos.length > 0 && (
+        <>
+          <Box width='100%'>
+            <GridLayout
+              repos={
+                page !== 1 && result.data
+                  ? (result.data as unknown as SearchRepositoryResult).repositories
+                  : props.repoGroup.repos
+              }
+              loading={result.isFetching}
+            />
           </Box>
-        )}
 
-        {page !== 1 && result.isError && <Typography variant='h5'>Error!</Typography>}
-
-        {(page === 1 || !result.isError) && (
-          <GridLayout
-            repos={
-              page !== 1 && result.data
-                ? (result.data as unknown as SearchRepositoryResult).repositories
-                : props.repoGroup.repos
-            }
-            loading={result.isFetching}
-          />
-        )}
-      </Stack>
-
-      <Box sx={{ marginX: 'auto' }}>
-        <Pagination currentPage={page} numPages={numPages} handlePageChange={handleChange} />
-      </Box>
+          <Box sx={{ marginX: 'auto' }}>
+            <Pagination currentPage={page} numPages={numPages} handlePageChange={handleChange} />
+          </Box>
+        </>
+      )}
     </Stack>
   )
 }

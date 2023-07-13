@@ -9,10 +9,11 @@ interface Props {
 
 export function RepoGroupDateHeader(props: Props) {
   const header = useMemo(() => {
-    const start = format(fromUnixTime(props.dateStartEnd.end), 'do MMM, yyyy')
-    const end = format(fromUnixTime(props.dateStartEnd.start), 'do MMM, yyyy')
+    const start = format(fromUnixTime(props.dateStartEnd.end), 'do MMM')
+    const end = format(fromUnixTime(props.dateStartEnd.start), 'do MMM')
+    const year = format(fromUnixTime(props.dateStartEnd.start), 'yyyy')
 
-    return `${end} - ${start}`
+    return `${end} - ${start}, ${year}`
   }, [props.dateStartEnd])
 
   return <Typography variant='h4'>{header}</Typography>
