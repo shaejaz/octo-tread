@@ -2,10 +2,20 @@ import styled from '@emotion/styled'
 import { Stack, Pagination as MUIPagination } from '@mui/material'
 
 const CustomPagination = styled(MUIPagination)(({ theme }) => ({
+  '& .MuiPaginationItem-root': {
+    borderRadius: theme.shape.borderRadius,
+    '&:hover': {
+      backgroundColor: theme.palette.grey[300],
+    },
+  },
+
   '& .MuiPaginationItem-root.Mui-selected': {
     color: theme.palette.primary.contrastText,
-    borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.primary.main,
+
+    '&:hover': {
+      backgroundColor: theme.palette.primary.main,
+    },
   },
 }))
 

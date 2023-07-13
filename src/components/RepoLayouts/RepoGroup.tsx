@@ -47,8 +47,8 @@ export function RepoGroup(props: Props) {
   }
 
   return (
-    <Stack direction='column' alignItems='center' spacing={3}>
-      <Stack direction='column' sx={{ width: '100%' }}>
+    <Stack direction='column' alignItems='center' spacing={3} width='100%'>
+      <Stack direction='column' width='100%'>
         {(props.showDateHeader || props.showDateHeader === undefined) && (
           <Box sx={{ mb: 3 }}>
             <RepoGroupDateHeader dateStartEnd={props.repoGroup.dateStartEnd} />
