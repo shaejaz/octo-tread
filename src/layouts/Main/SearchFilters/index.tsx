@@ -37,6 +37,10 @@ const FiltersButton = styled(Button)(({ theme }) => ({
   borderRadius: `0 0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
   boxShadow: 'none',
   backgroundColor: theme.vars.palette.primary.main,
+  position: 'absolute',
+  bottom: '0',
+  right: '50%',
+  transition: 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
 
   '&::before, &::after': {
     content: '""',
@@ -55,13 +59,6 @@ const FiltersButton = styled(Button)(({ theme }) => ({
     right: `-${theme.shape.borderRadius}px`,
     borderTopLeftRadius: theme.shape.borderRadius,
   },
-}))
-
-const FiltersButtonCollapse = styled(Collapse)(({ theme }) => ({
-  position: 'absolute',
-  bottom: '0',
-  transform: 'translate(50%, 100%)',
-  right: '50%',
 }))
 
 const CustomCollapse = styled(Collapse)(() => ({
@@ -98,7 +95,6 @@ type Props = StackProps
 
 export function SearchFilters(props: Props) {
   const [showFilters, setShowFilters] = useState(false)
-  const [filtersButtonIn, setFiltersButtonIn] = useState(true)
 
   const dispatch = useDispatch()
 
@@ -108,6 +104,11 @@ export function SearchFilters(props: Props) {
   const searchDateRange = useSelector((state: RootState) => state.searchquery.dateRange)
   const searchTopics = useSelector((state: RootState) => state.searchquery.topics)
   const repoItemsPerPage = useSelector((state: RootState) => state.searchquery.itemsPerPage)
+
+  const scrolledDown = useSelector((state: RootState) => state.ui.scrolledDown)
+  const toolbarHovered = useSelector((state: RootState) => state.ui.toolbarHovered)
+
+  const showFiltersButton = !scrolledDown || toolbarHovered || showFilters
 
   const {
     control,
@@ -257,21 +258,22 @@ export function SearchFilters(props: Props) {
       </CustomCollapse>
       <DummyCollapse in={showFilters} collapsedSize='calc(100% + 0.5rem)' />
 
-      <FiltersButtonCollapse in={filtersButtonIn}>
-        <FiltersButton
-          variant='contained'
-          endIcon={
-            <Icon
-              icon={
-                showFilters ? 'material-symbols:arrow-drop-up' : 'material-symbols:arrow-drop-down'
-              }
-            />
-          }
-          onClick={() => setShowFilters((prev) => !prev)}
-        >
-          Show filters
-        </FiltersButton>
-      </FiltersButtonCollapse>
+      <FiltersButton
+        variant='contained'
+        endIcon={
+          <Icon
+            icon={
+              showFilters ? 'material-symbols:arrow-drop-up' : 'material-symbols:arrow-drop-down'
+            }
+          />
+        }
+        onClick={() => setShowFilters((prev) => !prev)}
+        sx={{
+          transform: !showFiltersButton ? 'translate(50%, -30%)' : 'translate(50%, 100%)',
+        }}
+      >
+        Show filters
+      </FiltersButton>
     </Stack>
   )
 }

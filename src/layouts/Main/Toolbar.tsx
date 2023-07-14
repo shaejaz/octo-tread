@@ -16,12 +16,13 @@ import {
   TextField,
   Typography,
   containerClasses,
+  debounce,
   styled,
   typographyClasses,
 } from '@mui/material'
 import { Icon } from '@iconify/react'
 import { useIsDefaultTokenSet } from 'hooks/useIsDefaultToken'
-import { ReactEventHandler, useState } from 'react'
+import { ReactEventHandler, useMemo, useState } from 'react'
 import { InferType, object, string } from 'yup'
 import { Controller, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -31,6 +32,7 @@ import { RootState } from '@octotread/services/store'
 import type {} from '@mui/material/themeCssVarsAugmentation'
 import { SearchFilters } from './SearchFilters'
 import { ThemeSwitcher } from '@octotread/components/ThemeSwitcher'
+import { setToolbarHovered } from '@octotread/services/ui'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.default,
@@ -103,9 +105,30 @@ export function Toolbar() {
     setModalOpen(false)
   }
 
+  const debouncedSetToolbarHovered = useMemo(
+    () =>
+      debounce((hovered: boolean) => {
+        dispatch(setToolbarHovered(hovered))
+      }, 250),
+    [dispatch],
+  )
+
+  const handleMouseEnter = () => {
+    debouncedSetToolbarHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    debouncedSetToolbarHovered(false)
+  }
+
   return (
     <OctotreadAppBar position='sticky'>
-      <Container maxWidth='lg'>
+      <Container
+        maxWidth='lg'
+        sx={{ zIndex: 1 }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <MuiToolbar disableGutters sx={{ justifyContent: 'space-between' }}>
           <Typography variant='h5'>Octotread</Typography>
 

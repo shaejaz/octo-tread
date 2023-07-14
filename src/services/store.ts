@@ -4,6 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { enhancedGraphQlApi, restApi } from './api'
 import authReducer from './auth'
 import searchQueryReducer from './search-query'
+import uiReducer from './ui'
 
 export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | undefined) =>
   configureStore({
@@ -12,6 +13,7 @@ export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | 
       [restApi.reducerPath]: restApi.reducer,
       auth: authReducer,
       searchquery: searchQueryReducer,
+      ui: uiReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
