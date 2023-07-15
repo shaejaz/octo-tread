@@ -31,7 +31,8 @@ export function Main() {
         maxWidth='lg'
         marginX='auto'
         marginTop={8}
-        paddingBottom={4}
+        px={3}
+        pb={4}
       >
         <Outlet />
       </Stack>

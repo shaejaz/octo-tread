@@ -38,6 +38,7 @@ const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.default,
   backgroundImage: 'none',
   paddingTop: theme.spacing(2),
+  paddingInline: theme.spacing(3),
   boxShadow: 'none',
   transition: 'none',
   [`& .${containerClasses.root}`]: {

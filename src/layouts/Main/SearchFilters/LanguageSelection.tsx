@@ -1,4 +1,14 @@
-import { Box, BoxProps, Button } from '@mui/material'
+import {
+  Box,
+  BoxProps,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+} from '@mui/material'
 import { Autocomplete } from '@octotread/components/Autocomplete'
 import { useLazyGetAllQuery, useLazyGetPopularQuery } from '@octotread/services/api/rest/languages'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -11,21 +21,22 @@ interface Props {
 
 export function LanguageSelection(props: Props) {
   const [open, setOpen] = useState(false)
-  const [isAllLanguages, setIsAllLanguages] = useState(false)
+  const [languagesSelection, setLanguagesSelection] = useState<'popular' | 'all'>('popular')
 
   const [triggerGetAll, resultGetAll] = useLazyGetAllQuery()
   const [triggerGetPopular, resultGetPopular] = useLazyGetPopularQuery()
 
   const getLanguage = useCallback(
     (key: string) => {
-      return isAllLanguages ? resultGetAll.data?.[key] : resultGetPopular.data?.[key]
+      return languagesSelection === 'all' ? resultGetAll.data?.[key] : resultGetPopular.data?.[key]
     },
-    [isAllLanguages, resultGetAll.data, resultGetPopular.data],
+    [languagesSelection, resultGetAll.data, resultGetPopular.data],
   )
 
   const optionsToDisplay = useMemo(
-    () => Object.keys((isAllLanguages ? resultGetAll.data : resultGetPopular.data) || {}),
-    [isAllLanguages, resultGetAll.data, resultGetPopular.data],
+    () =>
+      Object.keys((languagesSelection === 'all' ? resultGetAll.data : resultGetPopular.data) || {}),
+    [languagesSelection, resultGetAll.data, resultGetPopular.data],
   )
 
   const _value = useMemo(() => {
@@ -36,14 +47,16 @@ export function LanguageSelection(props: Props) {
   }, [props.value, optionsToDisplay, getLanguage])
 
   useEffect(() => {
-    triggerGetPopular()
-  }, [triggerGetPopular])
-
-  useEffect(() => {
-    if (isAllLanguages) {
+    if (languagesSelection === 'all') {
       triggerGetAll()
+    } else {
+      triggerGetPopular()
     }
-  }, [isAllLanguages, triggerGetAll])
+  }, [languagesSelection, triggerGetAll, triggerGetPopular])
+
+  const handleLanguageSelectionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLanguagesSelection(event.target.value as 'popular' | 'all')
+  }
 
   return (
     <Box {...props.containerProps}>
@@ -74,11 +87,22 @@ export function LanguageSelection(props: Props) {
           label: 'Languages',
         }}
         renderHeader={
-          <Box px={2} py={1}>
-            <Button onClick={() => setIsAllLanguages(true)} sx={{ width: '100%' }}>
-              Get All
-            </Button>
-          </Box>
+          <Stack direction='column' px={2} py={1}>
+            <FormControl>
+              <FormLabel id='language-selection-group'>Select which languages to search</FormLabel>
+              <RadioGroup
+                name='language-selection-group'
+                row
+                value={languagesSelection}
+                onChange={handleLanguageSelectionChange}
+              >
+                <FormControlLabel value='all' control={<Radio />} label='All' />
+                <FormControlLabel value='popular' control={<Radio />} label='Popular' />
+              </RadioGroup>
+            </FormControl>
+
+            <Divider />
+          </Stack>
         }
       />
     </Box>
