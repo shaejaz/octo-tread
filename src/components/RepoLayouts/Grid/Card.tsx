@@ -108,7 +108,7 @@ export function RepoCard(props: RepoCardProps) {
 
                   <Box sx={{ flex: '0 0 auto' }}>
                     <Fade in={showOpenIcon}>
-                      <Icon icon='majesticons:open' color={theme.palette.primary.main} />
+                      <Icon icon='majesticons:open' color={theme.palette.primaryText.primary} />
                     </Fade>
                   </Box>
                 </Stack>

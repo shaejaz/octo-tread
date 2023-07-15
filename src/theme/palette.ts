@@ -15,8 +15,14 @@ export const lightPalette: PaletteOptions = {
   background: {
     default: '#f4f4f4',
   },
+  primaryText: {
+    primary: '#3c0c75',
+  },
 }
 
 export const darkPalette: PaletteOptions = {
   ...palette,
+  primaryText: {
+    primary: '#C59FF4',
+  },
 }

@@ -8,7 +8,7 @@ import {
   Tooltip,
   Typography,
   formLabelClasses,
-  inputBaseClasses,
+  inputLabelClasses,
   outlinedInputClasses,
   styled,
   typographyClasses,
@@ -22,9 +22,15 @@ const StyledInput = styled(TextField)(({ theme }) => ({
     position: 'relative',
     transform: 'scale(1)',
   },
-  [`& .${inputBaseClasses.focused}`]: {
+  [`& .${inputLabelClasses.focused}`]: {
     [`& .${typographyClasses.root}`]: {
-      color: theme.vars.palette.primary.main,
+      color: theme.palette.primaryText.primary,
+    },
+    [`& .iconify`]: {
+      color: theme.palette.primaryText.primary,
+    },
+    [`& .${outlinedInputClasses.notchedOutline}`]: {
+      borderColor: theme.palette.primaryText.primary,
     },
   },
   [`& .${outlinedInputClasses.notchedOutline}`]: {

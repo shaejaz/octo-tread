@@ -129,7 +129,7 @@ export function TopicFilter(props: Props) {
                     <Stack direction='row' alignItems='center' spacing={0.5}>
                       <Typography>Featured</Typography>
 
-                      <Tooltip title='Topics featured by GitHub' placement='right'>
+                      <Tooltip title='Topics with the most repositories on GitHub'>
                         <Icon icon='material-symbols:info-outline' />
                       </Tooltip>
                     </Stack>
@@ -146,7 +146,7 @@ export function TopicFilter(props: Props) {
                     <Stack direction='row' alignItems='center' spacing={0.5}>
                       <Typography>Curated</Typography>
 
-                      <Tooltip title='Topics curated by GitHub' placement='right'>
+                      <Tooltip title='Topics that community members have added extra information to'>
                         <Icon icon='material-symbols:info-outline' />
                       </Tooltip>
                     </Stack>
