@@ -33,6 +33,7 @@ import type {} from '@mui/material/themeCssVarsAugmentation'
 import { SearchFilters } from './SearchFilters'
 import { ThemeSwitcher } from '@octotread/components/ThemeSwitcher'
 import { setToolbarHovered } from '@octotread/services/ui'
+import { Authentication } from '@octotread/components/Authentication'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.default,
@@ -65,8 +66,8 @@ export function Toolbar() {
   const [modalOpen, setModalOpen] = useState(false)
 
   const avatarComponent = () => (
-    <Avatar>
-      <Icon icon='mdi:ticket-outline' />
+    <Avatar variant='rounded'>
+      <Icon icon='material-symbols:key-outline' />
     </Avatar>
   )
 
@@ -185,7 +186,9 @@ export function Toolbar() {
         </DialogTitle>
 
         <DialogContent>
-          <Controller
+          <Authentication />
+
+          {/* <Controller
             control={control}
             name='token'
             render={({ field, fieldState }) => (
@@ -196,7 +199,7 @@ export function Toolbar() {
                 {...field}
               />
             )}
-          />
+          /> */}
         </DialogContent>
 
         <DialogActions>

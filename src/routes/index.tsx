@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { Main } from '@octotread/layouts/Main'
 import { RepoLayouts } from '@octotread/components/RepoLayouts'
+import { Authorized } from '@octotread/layouts/Authorized'
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
         element: <RepoLayouts />,
       },
     ],
+  },
+  {
+    path: '/authorized',
+    element: <Authorized />,
   },
 ])
 
