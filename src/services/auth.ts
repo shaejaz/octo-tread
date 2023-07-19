@@ -1,14 +1,20 @@
+import { getItem } from '@octotread/utils/localstorage'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export const defaultToken = import.meta.env.VITE_GITHUB_KEY
+// export const defaultToken = import.meta.env.VITE_GITHUB_KEY
+
+export const tokenKey = 'token'
+export const oauthTokenKey = 'oauthToken'
 
 export interface AuthState {
   token: string
+  oauthToken: string
 }
 
 const initialState: AuthState = {
-  token: defaultToken,
+  token: getItem(tokenKey) || '',
+  oauthToken: getItem(oauthTokenKey) || '',
 }
 
 export const authSlice = createSlice({
@@ -18,9 +24,12 @@ export const authSlice = createSlice({
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload
     },
+    setOauthToken: (state, action: PayloadAction<string>) => {
+      state.oauthToken = action.payload
+    },
   },
 })
 
-export const { setToken } = authSlice.actions
+export const { setToken, setOauthToken } = authSlice.actions
 
 export default authSlice.reducer

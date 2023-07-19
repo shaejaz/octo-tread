@@ -2,18 +2,12 @@ import {
   AppBar,
   Avatar,
   Badge,
-  Button,
   Container,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
   Menu,
   MenuItem,
   Toolbar as MuiToolbar,
   Stack,
-  TextField,
   Typography,
   containerClasses,
   debounce,
@@ -21,10 +15,9 @@ import {
   typographyClasses,
 } from '@mui/material'
 import { Icon } from '@iconify/react'
-import { useIsDefaultTokenSet } from 'hooks/useIsDefaultToken'
 import { ReactEventHandler, useMemo, useState } from 'react'
 import { InferType, object, string } from 'yup'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { setToken } from '@octotread/services/auth'
@@ -33,7 +26,7 @@ import type {} from '@mui/material/themeCssVarsAugmentation'
 import { SearchFilters } from './SearchFilters'
 import { ThemeSwitcher } from '@octotread/components/ThemeSwitcher'
 import { setToolbarHovered } from '@octotread/services/ui'
-import { Authentication } from '@octotread/components/Authentication'
+import { AuthenticationDialog } from '@octotread/components/AuthenticationDialog'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.default,
@@ -58,7 +51,7 @@ const accessTokenSchema = object({
 
 export function Toolbar() {
   const dispatch = useDispatch()
-  const isDefault = useIsDefaultTokenSet()
+  const isDefault = true
 
   const [menuAnchorEl, setMenuAnchorEl] = useState<Element | null>(null)
   const menuOpen = Boolean(menuAnchorEl)
@@ -180,35 +173,11 @@ export function Toolbar() {
         <MenuItem onClick={handleModalOpen}>Set access token</MenuItem>
       </Menu>
 
-      <Dialog open={modalOpen} onClose={handleModalClose}>
-        <DialogTitle>
-          <Typography>Set your GitHub personal access token</Typography>
-        </DialogTitle>
-
-        <DialogContent>
-          <Authentication />
-
-          {/* <Controller
-            control={control}
-            name='token'
-            render={({ field, fieldState }) => (
-              <TextField
-                placeholder='Personal Access Token'
-                error={!!fieldState.error}
-                helperText={fieldState.error?.message}
-                {...field}
-              />
-            )}
-          /> */}
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={handleModalClose}>Cancel</Button>
-          <Button onClick={handleModalSave} disabled={!isValid}>
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <AuthenticationDialog
+        open={modalOpen}
+        onClose={handleMenuClose}
+        handleModalClose={handleModalClose}
+      />
 
       <SearchFilters maxWidth='lg' width='100%' marginX='auto' />
     </OctotreadAppBar>

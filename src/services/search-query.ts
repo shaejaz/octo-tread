@@ -85,6 +85,9 @@ export const searchQuerySlice = createSlice({
 
       state.datesToFetch.push(normalizeDateStartEnd(obj))
     },
+    setDatesToFetch: (state, action: PayloadAction<DateStartEnd[]>) => {
+      state.datesToFetch = action.payload
+    },
     setDateRange: (state, action: PayloadAction<DateRange>) => {
       state.repositories = { state: 'loading', data: [] }
       state.dateRange = action.payload
@@ -153,6 +156,7 @@ export const {
   setTopics,
   loadNextDateRange,
   appendDateToFetch,
+  setDatesToFetch,
   resetQuery,
 } = searchQuerySlice.actions
 

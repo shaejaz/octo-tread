@@ -8,8 +8,8 @@ export const Authorized = () => {
 
     if (code) {
       setTimeout(() => {
-        window.postMessage({ code }, window.location.origin)
-      }, 1000)
+        window.opener?.postMessage({ code }, window.location.origin)
+      }, 3000)
     }
   }, [])
 
