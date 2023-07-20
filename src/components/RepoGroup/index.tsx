@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { GridLayout } from './Grid'
+import { GridLayout } from '@octotread/components/RepoGrid'
 import { useSelector } from 'react-redux'
 import { RootState } from '@octotread/services/store'
 import { Box, Stack, useTheme } from '@mui/material'
@@ -16,7 +16,6 @@ interface Props {
   showDateHeader?: boolean
 }
 
-// TODO: Rename and fix structure of components
 export function RepoGroup(props: Props) {
   const [page, setPage] = useState(1)
   const [trigger, result] = useLazySearchRepositoriesQuery()

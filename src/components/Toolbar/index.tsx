@@ -16,7 +16,7 @@ import {
 import { Icon } from '@iconify/react'
 import { useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { SearchFilters } from './SearchFilters'
+import { SearchFilters } from '@octotread/components/SearchFilters'
 import { ThemeSwitcher } from '@octotread/components/ThemeSwitcher'
 import { setToolbarHovered } from '@octotread/services/ui'
 import { AuthenticationDialog } from '@octotread/components/AuthenticationDialog'

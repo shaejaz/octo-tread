@@ -27,8 +27,8 @@
       "@octotread/services/*": [
         "services/*"
       ],
-      "@octotread/layouts/*": [
-        "layouts/*"
+      "@octotread/pages/*": [
+        "pages/*"
       ],
       "@octotread/models/*": [
         "models/*"

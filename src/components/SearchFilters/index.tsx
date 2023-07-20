@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Collapse,
-  Paper,
-  Stack,
-  StackProps,
-  collapseClasses,
-  styled,
-} from '@mui/material'
+import { Button, Collapse, Paper, Stack, StackProps, collapseClasses, styled } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResetQueryState, resetQuery } from '@octotread/services/search-query'
 import { RootState } from '@octotread/services/store'
@@ -28,7 +19,7 @@ const FiltersPaper = styled(Paper)(({ theme }) => ({
   paddingTop: theme.spacing(2),
   paddingBottom: theme.spacing(3),
   paddingInline: theme.spacing(2),
-  color: theme.vars.palette.text.primary,
+  color: theme.palette.text.primary,
   width: '100%',
   border: `4px solid ${theme.palette.primary.main}`,
 }))
@@ -36,7 +27,7 @@ const FiltersPaper = styled(Paper)(({ theme }) => ({
 const FiltersButton = styled(Button)(({ theme }) => ({
   borderRadius: `0 0 ${theme.shape.borderRadius}px ${theme.shape.borderRadius}px`,
   boxShadow: 'none',
-  backgroundColor: theme.vars.palette.primary.main,
+  backgroundColor: theme.palette.primary.main,
   position: 'absolute',
   bottom: '0',
   right: '50%',

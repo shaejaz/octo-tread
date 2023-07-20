@@ -154,7 +154,6 @@ export function RepoCard(props: RepoCardProps) {
         <Stack direction='row' justifyContent='space-between' alignItems='center'>
           <StarGazersChip stars={repo.stargazerCount} />
 
-          {/* TODO: add color borders and expansion */}
           <Stack direction='row' spacing={1}>
             {repo.languages?.nodes?.length !== undefined && repo.languages?.nodes?.length > 0 && (
               <LanguageChip
