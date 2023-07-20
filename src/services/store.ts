@@ -1,10 +1,11 @@
-import { listenerMiddleware } from './listener'
 import { configureStore, ConfigureStoreOptions } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { enhancedGraphQlApi, restApi } from './api'
 import authReducer from './auth'
 import searchQueryReducer from './search-query'
 import uiReducer from './ui'
+import { listenerMiddleware } from './listener'
+import { localStorageListener } from './localstorage-listener'
 
 export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | undefined) =>
   configureStore({
@@ -18,6 +19,7 @@ export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | 
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .prepend(listenerMiddleware.middleware)
+        .prepend(localStorageListener.middleware)
         .concat(enhancedGraphQlApi.middleware)
         .concat(restApi.middleware),
     ...options,
