@@ -37,8 +37,8 @@ const StyledInput = styled(TextField)(({ theme }) => ({
     borderWidth: '2px',
   },
   [`& .${outlinedInputClasses.input}`]: {
-    background: theme.vars.palette.background.paper,
-    borderRadius: theme.vars.shape.borderRadius,
+    background: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius,
   },
   '& legend': {
     maxWidth: '0',

@@ -56,15 +56,15 @@ export function RepoLayouts() {
         </Stack>
       )}
 
-      {repos.state === 'loading' && <Loading />}
+      {(repos.state === 'loading' || authenticated === null) && <Loading />}
 
       {repos.state === 'error' && authenticated && (
         <Error message='Error in fetching repositories' />
       )}
 
-      {!authenticated && repos.state !== 'loading' && <Authentication />}
+      {authenticated === false && repos.state !== 'loading' && <Authentication />}
 
-      {repos.data.length > 0 && repos.state === 'done' && (
+      {repos.data.length > 0 && repos.state === 'done' && authenticated && (
         <Button variant='contained' onClick={() => dispatch(loadNextDateRange())} sx={{ px: 3 }}>
           Load next
         </Button>

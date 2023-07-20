@@ -1,7 +1,7 @@
 import { RootState } from '@octotread/services/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { Input } from '@octotread/components/Input'
-import { Box, Button, Link, Stack, Typography, styled, useTheme } from '@mui/material'
+import { Box, Button, Link, Stack, Tooltip, Typography, styled, useTheme } from '@mui/material'
 import { useLazyPostAPITokenQuery } from '@octotread/services/api/rest/oauth'
 import { useEffect, useMemo, useState } from 'react'
 import { Icon } from '@iconify/react'
@@ -151,14 +151,20 @@ export const Authentication = () => {
         </GitHubButton>
 
         {oauthSaved && (
-          <Button
-            variant='contained'
-            startIcon={<Icon icon='ic:round-check' />}
-            sx={{ alignSelf: 'center' }}
-            onClick={() => dispatch(setOauthToken(''))}
-          >
-            Logout
-          </Button>
+          <Tooltip title='You will still need to remove OctoTread from your GitHub accounts OAuth page'>
+            <Button
+              variant='contained'
+              onClick={() => dispatch(setOauthToken(''))}
+              sx={{ alignSelf: 'center' }}
+            >
+              <Stack direction='row' alignItems='center' spacing={1}>
+                <Typography sx={{ fontWeight: 'inherit', fontSize: 'inherit' }}>
+                  Remove OAuth token
+                </Typography>
+                <Icon icon='material-symbols:info-outline' />
+              </Stack>
+            </Button>
+          </Tooltip>
         )}
       </Stack>
     </Stack>

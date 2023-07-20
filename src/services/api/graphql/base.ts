@@ -7,8 +7,11 @@ const baseGraphQLQuery = graphqlRequestBaseQuery({
   url: 'https://api.github.com/graphql',
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token
+    const oauthToken = (getState() as RootState).auth.oauthToken
     if (token) {
       headers.set('authorization', `Bearer ${token}`)
+    } else if (oauthToken) {
+      headers.set('authorization', `token ${oauthToken}`)
     }
     headers.set('Accept', 'application/vnd.github.mercy-preview+json')
     return headers
