@@ -38,6 +38,12 @@
       ],
       "@octotread/theme/*": [
         "theme/*"
+      ],
+      "@octotread/hooks/*": [
+        "hooks/*"
+      ],
+      "@octotread/test/*": [
+        "test/*"
       ]
     }
   },
