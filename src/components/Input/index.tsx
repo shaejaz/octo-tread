@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react'
 import {
+  Box,
   IconButton,
   InputAdornment,
   Stack,
@@ -67,7 +68,7 @@ export const Input = (props: InputProps) => {
         endAdornment: error && (
           <InputAdornment position='end'>
             <Tooltip title={helperText}>
-              <IconButton disableRipple edge='end'>
+              <IconButton disableRipple data-testid='icon-container' edge='end'>
                 <Icon
                   icon='material-symbols:error-outline-rounded'
                   color={theme.palette.error.main}
@@ -84,7 +85,9 @@ export const Input = (props: InputProps) => {
 
           {tooltipText !== undefined && (
             <Tooltip title={tooltipText} placement='right'>
-              <Icon icon='material-symbols:info-outline' />
+              <Box>
+                <Icon icon='material-symbols:info-outline' />
+              </Box>
             </Tooltip>
           )}
         </Stack>

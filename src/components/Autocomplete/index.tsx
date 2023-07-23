@@ -1,7 +1,7 @@
-import { Icon } from '@iconify/react'
 import { Autocomplete as MuiAutocomplete, AutocompleteProps, Stack, useTheme } from '@mui/material'
 import { Input, InputProps } from '@octotread/components/Input'
 import { ReactNode } from 'react'
+import { Loading } from '@octotread/components/Loading'
 
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
@@ -12,13 +12,9 @@ type Props<T> = PartialBy<AutocompleteProps<T, true, false, false>, 'renderInput
 
 export function Autocomplete<T>(props: Props<T>) {
   const { customInputProps, renderHeader, options, loading, ...rest } = props
-  let headerOptions = options
+  const headerOptions = [{ header: true } as T, ...options]
 
   const theme = useTheme()
-
-  if (renderHeader) {
-    headerOptions = [{ header: true } as T, ...options]
-  }
 
   return (
     <MuiAutocomplete
@@ -41,8 +37,13 @@ export function Autocomplete<T>(props: Props<T>) {
             <>
               {renderHeader}
               {loading && (
-                <Stack direction='row' justifyContent='center' alignItems='center'>
-                  <Icon icon='eos-icons:loading' width='24' height='24' />
+                <Stack
+                  direction='row'
+                  justifyContent='center'
+                  alignItems='center'
+                  data-testid='loading-container'
+                >
+                  <Loading width={50} height={50} />
                 </Stack>
               )}
             </>

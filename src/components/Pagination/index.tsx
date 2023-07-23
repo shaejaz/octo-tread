@@ -1,5 +1,4 @@
-import styled from '@emotion/styled'
-import { Stack, Pagination as MUIPagination } from '@mui/material'
+import { Stack, Pagination as MUIPagination, styled } from '@mui/material'
 
 const CustomPagination = styled(MUIPagination)(({ theme }) => ({
   '& .MuiPaginationItem-root': {
