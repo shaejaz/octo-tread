@@ -15,6 +15,7 @@ import {
   typographyClasses,
   useTheme,
 } from '@mui/material'
+import { forwardRef } from 'react'
 
 const StyledInput = styled(TextField)(({ theme }) => ({
   [`& .${formLabelClasses.root} `]: {
@@ -50,13 +51,15 @@ export type InputProps = TextFieldProps & {
   tooltipText?: string
 }
 
-export const Input = (props: InputProps) => {
+// eslint-disable-next-line react/display-name
+export const Input = forwardRef((props: InputProps, ref) => {
   const { helperText, error, label, tooltipText, ...rest } = props
 
   const theme = useTheme()
 
   return (
     <StyledInput
+      ref={ref}
       {...rest}
       error={error}
       helperText={''}
@@ -94,4 +97,4 @@ export const Input = (props: InputProps) => {
       }
     />
   )
-}
+})

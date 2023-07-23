@@ -21,7 +21,9 @@
   "plugins": [
     "react",
     "@typescript-eslint",
-    "react-hooks"
+    "react-hooks",
+    "testing-library",
+    "jest-dom"
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",

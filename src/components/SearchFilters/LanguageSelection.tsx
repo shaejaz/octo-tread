@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import { Autocomplete } from '@octotread/components/Autocomplete'
 import { useLazyGetAllQuery, useLazyGetPopularQuery } from '@octotread/services/api/rest/languages'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
 
 interface Props {
   containerProps?: BoxProps
@@ -19,7 +19,8 @@ interface Props {
   handleValueChange: (s: string[]) => void
 }
 
-export function LanguageSelection(props: Props) {
+// eslint-disable-next-line react/display-name
+export const LanguageSelection = forwardRef((props: Props, ref) => {
   const [open, setOpen] = useState(false)
   const [languagesSelection, setLanguagesSelection] = useState<'popular' | 'all'>('popular')
 
@@ -59,7 +60,7 @@ export function LanguageSelection(props: Props) {
   }
 
   return (
-    <Box {...props.containerProps}>
+    <Box {...props.containerProps} ref={ref}>
       <Autocomplete
         disablePortal
         multiple
@@ -107,4 +108,4 @@ export function LanguageSelection(props: Props) {
       />
     </Box>
   )
-}
+})
