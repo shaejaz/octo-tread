@@ -150,6 +150,12 @@ export function SearchFilters(props: Props) {
   return (
     <Stack direction='column' sx={{ position: 'relative' }} {...props}>
       <CustomCollapse in={showFilters}>
+        {/* Typescript seems to yell here due to component not being a prop */}
+        {/* That is the case however: https://mui.com/material-ui/api/paper/#prop-component */}
+        {/* Might be due to a older version */}
+        {/* TODO: update MUI version to fix */}
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore next-line */}
         <FiltersPaper component={Stack} direction='column' alignItems='center' spacing={3}>
           <Stack direction='row' spacing={3} width='100%'>
             <Controller

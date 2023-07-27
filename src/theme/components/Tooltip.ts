@@ -3,7 +3,7 @@ import { Components, Theme } from '@mui/material'
 export const tooltip: Components<Omit<Theme, 'components'>>['MuiTooltip'] = {
   styleOverrides: {
     tooltip: ({ theme }) => ({
-      color: theme.vars.palette.text.primary,
+      color: theme.palette.text.primary,
       backgroundColor: theme.palette.background.paper,
       border: `3px solid ${theme.palette.primary.main}`,
       boxShadow: theme.shadows[3],

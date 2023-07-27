@@ -52,7 +52,7 @@ export type InputProps = TextFieldProps & {
 }
 
 // eslint-disable-next-line react/display-name
-export const Input = forwardRef((props: InputProps, ref) => {
+export const Input = forwardRef((props: InputProps, ref: TextFieldProps['ref']) => {
   const { helperText, error, label, tooltipText, ...rest } = props
 
   const theme = useTheme()
