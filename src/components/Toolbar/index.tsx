@@ -86,7 +86,10 @@ export function Toolbar() {
                 <Avatar
                   variant='rounded'
                   sx={{
-                    bgcolor: theme.palette.grey['700'],
+                    bgcolor:
+                      theme.palette.mode === 'dark'
+                        ? theme.palette.grey['600']
+                        : theme.palette.grey['400'],
                     boxShadow: theme.shadows['5'],
                   }}
                 >
@@ -99,7 +102,10 @@ export function Toolbar() {
               <Avatar
                 variant='rounded'
                 sx={{
-                  bgcolor: theme.palette.grey['700'],
+                  bgcolor:
+                    theme.palette.mode === 'dark'
+                      ? theme.palette.grey['600']
+                      : theme.palette.grey['400'],
                   boxShadow: theme.shadows['5'],
                 }}
               >
