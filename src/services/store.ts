@@ -4,7 +4,6 @@ import { enhancedGraphQlApi, restApi } from './api'
 import authReducer from './auth'
 import searchQueryReducer from './search-query'
 import uiReducer from './ui'
-import { listenerMiddleware } from './listener'
 import { localStorageListener } from './localstorage-listener'
 
 export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | undefined) =>
@@ -18,7 +17,6 @@ export const createStore = (options?: ConfigureStoreOptions['preloadedState'] | 
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
-        .prepend(listenerMiddleware.middleware)
         .prepend(localStorageListener.middleware)
         .concat(enhancedGraphQlApi.middleware)
         .concat(restApi.middleware),

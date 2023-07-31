@@ -14,12 +14,13 @@ import {
   useTheme,
 } from '@mui/material'
 import { Icon } from '@iconify/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { SearchFilters } from '@octotread/components/SearchFilters'
 import { ThemeSwitcher } from '@octotread/components/ThemeSwitcher'
-import { setToolbarHovered } from '@octotread/services/ui'
+import { setScrolledDown, setToolbarHovered } from '@octotread/services/ui'
 import { AuthenticationDialog } from '@octotread/components/AuthenticationDialog'
+import { useWindowScrollPosition } from '@octotread/hooks/useWindowScrollPosition'
 
 const OctotreadAppBar = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.default,
@@ -42,6 +43,16 @@ export function Toolbar() {
   const theme = useTheme()
 
   const [modalOpen, setModalOpen] = useState(false)
+
+  const scroll = useWindowScrollPosition()
+
+  useEffect(() => {
+    if (scroll > 100) {
+      dispatch(setScrolledDown(true))
+    } else {
+      dispatch(setScrolledDown(false))
+    }
+  }, [dispatch, scroll])
 
   const handleModalOpen = () => {
     setModalOpen(true)
