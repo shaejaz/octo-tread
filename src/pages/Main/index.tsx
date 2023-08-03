@@ -3,20 +3,23 @@ import { Box, Divider, Stack, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RepoGroup } from '@octotread/components/RepoGroup'
-import { setDatesToFetch, loadNextDateRange } from '@octotread/services/search-query'
-import { getUnixTime, subWeeks } from 'date-fns'
 import { RootState } from '@octotread/services/store'
 import { Authentication } from '@octotread/components/Authentication'
+import { DateStartEnd } from '@octotread/models/dateStartEnd'
+import { generateDateStartEnd, normalizeDateStartEnd } from '@octotread/utils/dates'
 
 export function Main() {
   const theme = useTheme()
   const dispatch = useDispatch()
 
-  const dates = useSelector((state: RootState) => state.searchquery.datesToFetch)
+  const dateRange = useSelector((state: RootState) => state.searchquery.dateRange)
   const token = useSelector((state: RootState) => state.auth.token)
   const oauth = useSelector((state: RootState) => state.auth.oauthToken)
 
+  const queryState = useSelector((state: RootState) => state.searchquery)
+
   const [authenticated, setAuthenticated] = useState<boolean | null>(null)
+  const [dates, setDates] = useState<DateStartEnd[]>([])
 
   useEffect(() => {
     if (token === '' && oauth === '') {
@@ -28,19 +31,15 @@ export function Main() {
 
   useEffect(() => {
     if (authenticated) {
-      dispatch(
-        setDatesToFetch([
-          {
-            end: getUnixTime(new Date()),
-            start: getUnixTime(subWeeks(new Date(), 1)),
-          },
-        ]),
-      )
+      setDates([generateDateStartEnd(queryState.dateRange)])
     }
-  }, [authenticated, dispatch])
+  }, [authenticated, dispatch, queryState])
 
   const handleNextClick = () => {
-    dispatch(loadNextDateRange())
+    const last = dates[dates.length - 1]
+    const d = generateDateStartEnd(dateRange, last)
+
+    setDates((prev) => [...prev, normalizeDateStartEnd(d)])
   }
 
   return (

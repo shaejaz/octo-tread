@@ -233,8 +233,9 @@ export function SearchFilters(props: Props) {
               <Controller
                 control={control}
                 name='topics'
-                render={({ field: { onChange } }) => (
+                render={({ field: { value, onChange } }) => (
                   <TopicFilter
+                    value={value}
                     handleValueChange={(v) => onChange(v)}
                     containerProps={{ sx: { flex: '1 1 50%' } }}
                   />

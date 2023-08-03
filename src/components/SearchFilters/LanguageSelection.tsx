@@ -40,13 +40,6 @@ export const LanguageSelection = forwardRef((props: Props, ref) => {
     [languagesSelection, resultGetAll.data, resultGetPopular.data],
   )
 
-  const _value = useMemo(() => {
-    if (optionsToDisplay) {
-      return optionsToDisplay.filter((i) => props.value.some((n) => n === getLanguage(i)?.slug))
-    }
-    return []
-  }, [props.value, optionsToDisplay, getLanguage])
-
   useEffect(() => {
     if (languagesSelection === 'all') {
       triggerGetAll()
@@ -65,7 +58,7 @@ export const LanguageSelection = forwardRef((props: Props, ref) => {
         disablePortal
         multiple
         id='languages-search-list'
-        value={_value}
+        value={props.value}
         open={open}
         onOpen={() => {
           setOpen(true)
@@ -78,9 +71,6 @@ export const LanguageSelection = forwardRef((props: Props, ref) => {
             newValue.map((i) => getLanguage(i)?.slug).filter((i) => i !== undefined) as string[],
           )
         }}
-        isOptionEqualToValue={(option, value) =>
-          getLanguage(option)?.slug === getLanguage(value)?.slug
-        }
         options={optionsToDisplay}
         loading={resultGetAll.isFetching || resultGetPopular.isFetching}
         customInputProps={{

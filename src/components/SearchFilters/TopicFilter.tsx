@@ -22,6 +22,7 @@ const defaultTopicQuery: TopicSearchQuery = {
 }
 
 interface Props {
+  value: string[]
   handleValueChange: (v: string[]) => void
   containerProps?: BoxProps
 }
@@ -43,6 +44,16 @@ export function TopicFilter(props: Props) {
     },
     [trigger],
   )
+
+  useEffect(() => {
+    if (props.value.length) {
+      setValues(
+        props.value.map((v) => {
+          return { name: v, display_name: v } as Topic
+        }),
+      )
+    }
+  }, [props.value])
 
   const debouncedTrigger = useMemo(
     () =>
