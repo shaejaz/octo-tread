@@ -9,6 +9,7 @@ import {
   Tooltip,
   Typography,
   formLabelClasses,
+  inputBaseClasses,
   inputLabelClasses,
   outlinedInputClasses,
   styled,
@@ -37,6 +38,9 @@ const StyledInput = styled(TextField)(({ theme }) => ({
   },
   [`& .${outlinedInputClasses.notchedOutline}`]: {
     borderWidth: '2px',
+  },
+  [`& .${inputBaseClasses.root}`]: {
+    background: theme.palette.background.paper,
   },
   [`& .${outlinedInputClasses.input}`]: {
     background: theme.palette.background.paper,
