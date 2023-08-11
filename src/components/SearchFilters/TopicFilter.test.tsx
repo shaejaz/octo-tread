@@ -29,7 +29,7 @@ describe('TopicFilter', () => {
   it('should render the component', () => {
     render(
       <Provider store={createStore()}>
-        <TopicFilter handleValueChange={() => 0} />
+        <TopicFilter value={[]} handleValueChange={() => 0} />
       </Provider>,
     )
 
@@ -39,7 +39,7 @@ describe('TopicFilter', () => {
   it('should show options when clicked', async () => {
     render(
       <Provider store={createStore()}>
-        <TopicFilter handleValueChange={() => 0} />
+        <TopicFilter value={[]} handleValueChange={() => 0} />
       </Provider>,
     )
 
